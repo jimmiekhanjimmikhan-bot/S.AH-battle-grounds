@@ -56,80 +56,75 @@
         <div style="text-align: center; margin: 15px 0;">
 
 </div>
-        <div id="uploadScreen" class="page hidden" style="text-align: center; padding: 20px; background: #000; color: white; min-height: 100vh;">
-    <h2 style="color: #ff4500; text-shadow: 0 0 10px #ff4500;">SEND PAYMENT PROOF</h2>
-    <p style="color: #ccc; font-size: 14px;">Select screenshot and click submit</p>
-
-    <img id="ssPreview" style="width: 90%; max-height: 300px; display: none; margin: 15px auto; border-radius: 10px; border: 2px solid #ff4500;">
-
-    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewScreenshot(this)">
+        
+<div id="uploadScreen" style="text-align: center; padding: 20px; background: #111; border: 2px solid #ff4500; border-radius: 15px; margin: 10px;">
+    <h3 style="color: #ff4500;">SEND PAYMENT PROOF</h3>
     
-    <button onclick="document.getElementById('fileInput').click()" style="background: #333; color: white; padding: 20px; border: 2px dashed #ff4500; width: 90%; margin: 20px 0; border-radius: 10px; font-weight: bold;">
-        📁 CHOOSE FROM GALLERY
+    <div id="previewBox" style="display:none; margin-bottom: 15px;">
+        <img id="imgPrev" style="width: 100%; max-height: 250px; border-radius: 10px; border: 1px solid #555;">
+    </div>
+
+    <button onclick="document.getElementById('fileSelector').click()" style="background: #333; color: white; width: 90%; padding: 15px; border: 1px dashed #ff4500; border-radius: 10px; cursor: pointer; font-weight: bold;">
+        📁 SELECT FROM GALLERY
     </button>
+    <input type="file" id="fileSelector" style="display: none;" onchange="loadPhoto(this)">
 
-    <p id="uploadStatus" style="color: #ffcc00; font-weight: bold;"></p>
+    <p id="statusTxt" style="color: #aaa; font-size: 12px; margin: 10px 0;"></p>
 
-    <button id="submitSSBtn" onclick="uploadToFirebase()" style="background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; width: 90%; font-weight: bold; font-size: 18px; display: none;">
-        🚀 SUBMIT TO ADMIN
+    <button id="finalSendBtn" onclick="pushToAdmin()" style="background: #28a745; color: white; width: 90%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; display: none; font-size: 16px;">
+        ✅ SEND TO SHOAIB 🔥
     </button>
-
-    <br><br>
-    <button onclick="showPage('home')" style="color: #bbb; background: none; border: none; text-decoration: underline;">BACK TO HOME</button>
 </div>
 
 <script>
-let encodedImage = "";
+let finalImgData = "";
 
-// 1. Photo select karte hi preview dikhayega
-function previewScreenshot(input) {
+// 1. Photo select karke preview dikhana
+function loadPhoto(input) {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('ssPreview').src = e.target.result;
-            document.getElementById('ssPreview').style.display = "block";
-            document.getElementById('submitSSBtn').style.display = "block";
-            encodedImage = e.target.result; // Base64 string
+            document.getElementById('imgPrev').src = e.target.result;
+            document.getElementById('previewBox').style.display = "block";
+            document.getElementById('finalSendBtn').style.display = "block";
+            document.getElementById('statusTxt').innerText = "Photo Selected! Ready to send.";
+            finalImgData = e.target.result; 
         };
         reader.readAsDataURL(input.files[0]);
     }
 }
 
-// 2. Firebase mein bhejane wala function
-function uploadToFirebase() {
-    if (!encodedImage) return alert("Pehle photo select karo!");
-    
-    const status = document.getElementById('uploadStatus');
-    const submitBtn = document.getElementById('submitSSBtn');
-    
-    // User ki info (Jo aapke login system se milti ho)
-    // Agar user logged in hai toh uski ID aur Name yahan honi chahiye
-    const pName = localStorage.getItem("playerName") || "Unknown Player"; 
-    const pUID = localStorage.getItem("playerUID") || "No-UID";
+// 2. Direct Firebase Admin Payments mein bhej dena
+function pushToAdmin() {
+    const btn = document.getElementById('finalSendBtn');
+    const status = document.getElementById('statusTxt');
 
-    status.innerText = "Uploading... Please wait ⏳";
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = "0.5";
+    // USER KI DETAILS (Ye tumhare login system se aayengi)
+    // Agar tumhare pas variables hain toh wo yahan likh do
+    let pName = typeof userName !== 'undefined' ? userName : "Unknown Player";
+    let pUID = typeof userUID !== 'undefined' ? userUID : "No-UID";
 
-    // Firebase database mein 'adminPayments' folder mein push kar raha hai
-    // Note: 'db' variable aapki firebase configuration se aana chahiye
+    btn.disabled = true;
+    btn.innerText = "SENDING... ⏳";
+    status.innerText = "Uploading to Admin Panel...";
+
+    // Tumhare Admin Panel ka folder 'adminPayments' hai
     db.ref('adminPayments').push({
         playerName: pName,
         playerUID: pUID,
-        screenshot: encodedImage,
-        timestamp: Date.now()
+        screenshot: finalImgData,
+        date: new Date().toLocaleString()
     }).then(() => {
-        status.innerText = "✅ SENT SUCCESSFULLY!";
-        alert("Screenshot Admin ko bhej diya gaya hai! 30 mins intezar karein.");
-        location.reload(); // Page refresh taake reset ho jaye
-    }).catch((error) => {
-        console.error(error);
-        alert("Error! Firebase connection check karein.");
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = "1";
+        alert("Bhai, Screenshot bhej diya gaya hai! ✅\nAdmin 30 mins mein check karega.");
+        location.reload(); // Refresh to reset
+    }).catch((err) => {
+        alert("Error: " + err.message);
+        btn.disabled = false;
+        btn.innerText = "RETRY SENDING";
     });
 }
-    </script>
+</script>
+        
         
 
 <div id="home" class="page active">
