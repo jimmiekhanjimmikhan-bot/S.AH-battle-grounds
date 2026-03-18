@@ -51,15 +51,27 @@
         <button id="profileBtn" class="hidden" onclick="showPage('profile')">👤 PROFILE</button>
         <button id="loginBtn" onclick="showPage('login')">🔑 LOGIN</button>
         <button id="regBtn" onclick="showPage('register')">📝 JOIN</button>
-        <div style="text-align: center; margin: 15px;">
-    <button class="ss-btn" style="width: 80%; padding: 12px; background: #ffcc00; color: #000;" onclick="showPage('screenshotUploadPage')">
-        📸 SEND PAYMENT SCREENSHOT
+    
+        </div>
+        <div id="screenshotUploadPage" class="page hidden" style="text-align: center; padding: 20px;">
+    <h3>Upload Payment Screenshot</h3>
+    
+    <input type="file" id="screenshotInput" accept="image/*" style="margin: 20px 0; padding: 10px; border: 1px solid #ccc; width: 80%;">
+    
+    <br>
+    
+    <button class="ss-btn" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;" onclick="uploadScreenshot()">
+        SUBMIT SCREENSHOT
+    </button>
+    
+    <button style="margin-top: 20px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px;" onclick="showPage('homePage')">
+        Back
     </button>
         </div>
-        
+    
     
         
-    </div>
+    
 </header>
 
 <div id="home" class="page active">
