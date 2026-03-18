@@ -54,35 +54,82 @@
         <button id="regBtn" onclick="showPage('register')">📝 JOIN</button>
     <div style="text-align: center; margin-top: 15px;">
         <div style="text-align: center; margin: 15px 0;">
-    <button onclick="document.getElementById('uploadScreen').style.display='flex'" style="background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; width: 90%; cursor: pointer; box-shadow: 0px 4px 6px rgba(0,0,0,0.2);">
-        📸 SEND PAYMENT SCREENSHOT
-    </button>
-</div>
 
-<div id="uploadScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; color: white; z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+</div>
+        <div id="uploadScreen" class="page hidden" style="text-align: center; padding: 20px; background: #000; color: white; min-height: 100vh;">
+    <h2 style="color: #ff4500; text-shadow: 0 0 10px #ff4500;">SEND PAYMENT PROOF</h2>
+    <p style="color: #ccc; font-size: 14px;">Select screenshot and click submit</p>
+
+    <img id="ssPreview" style="width: 90%; max-height: 300px; display: none; margin: 15px auto; border-radius: 10px; border: 2px solid #ff4500;">
+
+    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewScreenshot(this)">
     
-    <h2 style="color: #ffcc00; margin-bottom: 10px;">Payment Proof</h2>
-    <p style="font-size: 14px; color: #bbb;">Select your screenshot from gallery</p>
-
-    <form id="uploadForm" action="/admin/upload-endpoint" method="POST" enctype="multipart/form-data" style="width: 100%;">
-        
-        <input type="file" name="screenshot" id="actualFileInput" accept="image/*" style="display: none;" onchange="document.getElementById('fileStatus').innerText = 'Selected: ' + this.files[0].name">
-        
-        <div onclick="document.getElementById('actualFileInput').click()" style="background: #333; color: #fff; padding: 20px; border-radius: 10px; border: 2px dashed #555; width: 85%; margin: 20px auto; font-weight: bold; cursor: pointer;">
-            📁 CHOOSE FROM GALLERY
-        </div>
-        
-        <p id="fileStatus" style="font-size: 12px; color: #28a745; margin-bottom: 15px;"></p>
-
-        <button type="submit" style="background: #ffcc00; color: #000; padding: 12px 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 80%;">
-            SUBMIT NOW
-        </button>
-    </form>
-
-    <button onclick="document.getElementById('uploadScreen').style.display='none'" style="margin-top: 25px; background: transparent; color: #ff4500; border: none; font-weight: bold; cursor: pointer;">
-        ✖ CANCEL / BACK
+    <button onclick="document.getElementById('fileInput').click()" style="background: #333; color: white; padding: 20px; border: 2px dashed #ff4500; width: 90%; margin: 20px 0; border-radius: 10px; font-weight: bold;">
+        📁 CHOOSE FROM GALLERY
     </button>
+
+    <p id="uploadStatus" style="color: #ffcc00; font-weight: bold;"></p>
+
+    <button id="submitSSBtn" onclick="uploadToFirebase()" style="background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; width: 90%; font-weight: bold; font-size: 18px; display: none;">
+        🚀 SUBMIT TO ADMIN
+    </button>
+
+    <br><br>
+    <button onclick="showPage('home')" style="color: #bbb; background: none; border: none; text-decoration: underline;">BACK TO HOME</button>
 </div>
+
+<script>
+let encodedImage = "";
+
+// 1. Photo select karte hi preview dikhayega
+function previewScreenshot(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('ssPreview').src = e.target.result;
+            document.getElementById('ssPreview').style.display = "block";
+            document.getElementById('submitSSBtn').style.display = "block";
+            encodedImage = e.target.result; // Base64 string
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 2. Firebase mein bhejane wala function
+function uploadToFirebase() {
+    if (!encodedImage) return alert("Pehle photo select karo!");
+    
+    const status = document.getElementById('uploadStatus');
+    const submitBtn = document.getElementById('submitSSBtn');
+    
+    // User ki info (Jo aapke login system se milti ho)
+    // Agar user logged in hai toh uski ID aur Name yahan honi chahiye
+    const pName = localStorage.getItem("playerName") || "Unknown Player"; 
+    const pUID = localStorage.getItem("playerUID") || "No-UID";
+
+    status.innerText = "Uploading... Please wait ⏳";
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.5";
+
+    // Firebase database mein 'adminPayments' folder mein push kar raha hai
+    // Note: 'db' variable aapki firebase configuration se aana chahiye
+    db.ref('adminPayments').push({
+        playerName: pName,
+        playerUID: pUID,
+        screenshot: encodedImage,
+        timestamp: Date.now()
+    }).then(() => {
+        status.innerText = "✅ SENT SUCCESSFULLY!";
+        alert("Screenshot Admin ko bhej diya gaya hai! 30 mins intezar karein.");
+        location.reload(); // Page refresh taake reset ho jaye
+    }).catch((error) => {
+        console.error(error);
+        alert("Error! Firebase connection check karein.");
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = "1";
+    });
+}
+    </script>
         
 
 <div id="home" class="page active">
