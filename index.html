@@ -80,37 +80,7 @@
 </div>
 
 <script>
-let finalImgData = "";
 
-// 1. Photo select karke preview dikhana
-function loadPhoto(input) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('imgPrev').src = e.target.result;
-            document.getElementById('previewBox').style.display = "block";
-            document.getElementById('finalSendBtn').style.display = "block";
-            document.getElementById('statusTxt').innerText = "Photo Selected! Ready to send.";
-            finalImgData = e.target.result; 
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-// 2. Direct Firebase Admin Payments mein bhej dena
-
-        <div id="ai-status-container" style="margin-top: 15px; text-align: center;">
-    <div id="processing-text" style="display: none; color: #ffcc00; font-weight: bold; font-size: 14px;">
-        <span class="spinner">⏳</span> AI Scanner: Processing Screenshot... 
-        <br><small style="color: #888; font-weight: normal;">Please don't close this page.</small>
-    </div>
-    <div id="final-result" style="margin-top: 10px; font-weight: bold;"></div>
-</div>
-
-<style>
-.spinner { display: inline-block; animation: rotation 2s infinite linear; }
-@keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(359deg); } }
-</style>
     
 
 <div id="home" class="page active">
@@ -317,78 +287,7 @@ db.ref('liveMatches').on('value', snap => {
     });
     document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
 });
-// --- AI AUTO-SCAN LOGIC ---
-async function handleAutoScan(input) {
-    const file = input.files[0];
-    const procText = document.getElementById('processing-text');
-    const finalResult = document.getElementById('final-result');
 
-    if (!file) return;
-
-    // UI Updates
-    procText.style.display = "block";
-    finalResult.innerHTML = "";
-
-    try {
-        // AI Reading Image
-        const result = await Tesseract.recognize(file, 'eng');
-        const text = result.data.text.toLowerCase();
-
-        // 1. Account Check (Name & Number)
-        const isCorrectAccount = text.includes("03047391349") || text.includes("muhammad iqbal");
-
-        // 2. Date Check (Max 2 Days Old)
-        const now = new Date();
-        let isDateValid = false;
-        for (let i = 0; i <= 2; i++) {
-            let checkDate = new Date();
-            checkDate.setDate(now.getDate() - i);
-            let d = checkDate.getDate().toString();
-            let m = checkDate.toLocaleString('default', { month: 'short' }).toLowerCase();
-            if (text.includes(d) && text.includes(m)) {
-                isDateValid = true;
-                break;
-            }
-        }
-
-        // 3. Status Check
-        const isPaid = text.includes("success") || text.includes("completed") || text.includes("paid") || text.includes("sent");
-
-        procText.style.display = "none";
-
-        if (!isCorrectAccount) {
-            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Rejected: Send to Muhammad Iqbal (03047391349).</span>";
-        } 
-        else if (!isDateValid) {
-            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Your SS is Fake or too old!</span>";
-        }
-        else if (isPaid) {
-            finalResult.innerHTML = "<span style='color: #00ff00;'>✅ Verified! 100 Coins Added.</span>";
-            // Coins add karne ka function call
-            addCoinsToFirebase(100); 
-        } else {
-            finalResult.innerHTML = "<span style='color: orange;'>⚠️ Transaction details not clear. Try again.</span>";
-        }
-
-    } catch (err) {
-        procText.style.display = "none";
-        finalResult.innerHTML = "<span style='color: red;'>⚠️ AI Error: Clear photo upload karein.</span>";
-    }
-}
-
-// --- Firebase Coins Function ---
-function addCoinsToFirebase(amount) {
-    // Apni logic ke mutabiq ID pakrein, main example de raha hun
-    const userId = "current_user_id"; // Yahan aapka login user ID hona chahiye
-    const dbRef = firebase.database().ref('users/' + userId);
-    
-    dbRef.child('coins').transaction((currentCoins) => {
-        return (currentCoins || 0) + amount;
-    }).then(() => {
-        alert("Success! 100 Coins added to your wallet.");
-    });
-    }
-    
 </script>
 </body>
 </html>
