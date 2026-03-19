@@ -98,36 +98,7 @@ function loadPhoto(input) {
 }
 
 // 2. Direct Firebase Admin Payments mein bhej dena
-function pushToAdmin() {
-    const btn = document.getElementById('finalSendBtn');
-    const status = document.getElementById('statusTxt');
 
-    // USER KI DETAILS (Ye tumhare login system se aayengi)
-    // Agar tumhare pas variables hain toh wo yahan likh do
-    let pName = typeof userName !== 'undefined' ? userName : "Unknown Player";
-    let pUID = typeof userUID !== 'undefined' ? userUID : "No-UID";
-
-    btn.disabled = true;
-    btn.innerText = "SENDING... ⏳";
-    status.innerText = "Uploading to Admin Panel...";
-
-    // Tumhare Admin Panel ka folder 'adminPayments' hai
-    db.ref('adminPayments').push({
-        playerName: pName,
-        playerUID: pUID,
-        screenshot: finalImgData,
-        date: new Date().toLocaleString()
-    }).then(() => {
-        alert("Bhai, Screenshot bhej diya gaya hai! ✅\nAdmin 30 mins mein check karega.");
-        location.reload(); // Refresh to reset
-    }).catch((err) => {
-        alert("Error: " + err.message);
-        btn.disabled = false;
-        btn.innerText = "RETRY SENDING";
-    });
-}
-</script>
-        
         <div id="ai-status-container" style="margin-top: 15px; text-align: center;">
     <div id="processing-text" style="display: none; color: #ffcc00; font-weight: bold; font-size: 14px;">
         <span class="spinner">⏳</span> AI Scanner: Processing Screenshot... 
@@ -137,17 +108,10 @@ function pushToAdmin() {
 </div>
 
 <style>
-/* Spinner animation */
-.spinner {
-    display: inline-block;
-    animation: rotation 2s infinite linear;
-}
-@keyframes rotation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(359deg); }
-}
+.spinner { display: inline-block; animation: rotation 2s infinite linear; }
+@keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(359deg); } }
 </style>
-        
+    
 
 <div id="home" class="page active">
     <div id="homeWallet" class="home-wallet hidden">
@@ -353,63 +317,76 @@ db.ref('liveMatches').on('value', snap => {
     });
     document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
 });
-    async function handleAutoScan(input) {
+// --- AI AUTO-SCAN LOGIC ---
+async function handleAutoScan(input) {
     const file = input.files[0];
     const procText = document.getElementById('processing-text');
     const finalResult = document.getElementById('final-result');
 
     if (!file) return;
 
+    // UI Updates
     procText.style.display = "block";
     finalResult.innerHTML = "";
 
     try {
+        // AI Reading Image
         const result = await Tesseract.recognize(file, 'eng');
         const text = result.data.text.toLowerCase();
 
-        // 1. ACCOUNT CHECK (Number & Name)
+        // 1. Account Check (Name & Number)
         const isCorrectAccount = text.includes("03047391349") || text.includes("muhammad iqbal");
 
-        // 2. DATE CHECK (Max 2 Days Old)
+        // 2. Date Check (Max 2 Days Old)
         const now = new Date();
-        const ssDate = new Date(); // Isko hum text se match karenge niche
-        
         let isDateValid = false;
-        for (let i = 0; i <= 2; i++) { // Aaj, Kal, aur Parson check karega
+        for (let i = 0; i <= 2; i++) {
             let checkDate = new Date();
             checkDate.setDate(now.getDate() - i);
             let d = checkDate.getDate().toString();
             let m = checkDate.toLocaleString('default', { month: 'short' }).toLowerCase();
-            
             if (text.includes(d) && text.includes(m)) {
                 isDateValid = true;
                 break;
             }
         }
 
-        // 3. SUCCESS CHECK
+        // 3. Status Check
         const isPaid = text.includes("success") || text.includes("completed") || text.includes("paid") || text.includes("sent");
 
         procText.style.display = "none";
 
-        // FINAL VERIFICATION
         if (!isCorrectAccount) {
-            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Rejected: Wrong Account! Please send to Muhammad Iqbal.</span>";
+            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Rejected: Send to Muhammad Iqbal (03047391349).</span>";
         } 
         else if (!isDateValid) {
-            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Your SS is Fake or too old (Max 2 days allowed).</span>";
+            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Your SS is Fake or too old!</span>";
         }
         else if (isPaid) {
             finalResult.innerHTML = "<span style='color: #00ff00;'>✅ Verified! 100 Coins Added.</span>";
-            addCoinsToFirebase(100);
+            // Coins add karne ka function call
+            addCoinsToFirebase(100); 
         } else {
-            finalResult.innerHTML = "<span style='color: orange;'>⚠️ Transaction not successful.</span>";
+            finalResult.innerHTML = "<span style='color: orange;'>⚠️ Transaction details not clear. Try again.</span>";
         }
 
     } catch (err) {
         procText.style.display = "none";
-        finalResult.innerHTML = "⚠️ Error reading image. Try again.";
+        finalResult.innerHTML = "<span style='color: red;'>⚠️ AI Error: Clear photo upload karein.</span>";
     }
+}
+
+// --- Firebase Coins Function ---
+function addCoinsToFirebase(amount) {
+    // Apni logic ke mutabiq ID pakrein, main example de raha hun
+    const userId = "current_user_id"; // Yahan aapka login user ID hona chahiye
+    const dbRef = firebase.database().ref('users/' + userId);
+    
+    dbRef.child('coins').transaction((currentCoins) => {
+        return (currentCoins || 0) + amount;
+    }).then(() => {
+        alert("Success! 100 Coins added to your wallet.");
+    });
     }
     
 </script>
