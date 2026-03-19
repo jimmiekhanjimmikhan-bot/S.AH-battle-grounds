@@ -37,6 +37,7 @@
         .home-wallet { background: #1a1a1a; padding: 10px; border-radius: 10px; margin: 10px auto; max-width: 360px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
         .ss-warning { color: #ffcc00; font-size: 11px; text-align: center; display: block; margin-top: 5px; font-weight: bold; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
@@ -127,6 +128,25 @@ function pushToAdmin() {
 }
 </script>
         
+        <div id="ai-status-container" style="margin-top: 15px; text-align: center;">
+    <div id="processing-text" style="display: none; color: #ffcc00; font-weight: bold; font-size: 14px;">
+        <span class="spinner">⏳</span> AI Scanner: Processing Screenshot... 
+        <br><small style="color: #888; font-weight: normal;">Please don't close this page.</small>
+    </div>
+    <div id="final-result" style="margin-top: 10px; font-weight: bold;"></div>
+</div>
+
+<style>
+/* Spinner animation */
+.spinner {
+    display: inline-block;
+    animation: rotation 2s infinite linear;
+}
+@keyframes rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(359deg); }
+}
+</style>
         
 
 <div id="home" class="page active">
@@ -333,6 +353,65 @@ db.ref('liveMatches').on('value', snap => {
     });
     document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
 });
+    async function handleAutoScan(input) {
+    const file = input.files[0];
+    const procText = document.getElementById('processing-text');
+    const finalResult = document.getElementById('final-result');
+
+    if (!file) return;
+
+    procText.style.display = "block";
+    finalResult.innerHTML = "";
+
+    try {
+        const result = await Tesseract.recognize(file, 'eng');
+        const text = result.data.text.toLowerCase();
+
+        // 1. ACCOUNT CHECK (Number & Name)
+        const isCorrectAccount = text.includes("03047391349") || text.includes("muhammad iqbal");
+
+        // 2. DATE CHECK (Max 2 Days Old)
+        const now = new Date();
+        const ssDate = new Date(); // Isko hum text se match karenge niche
+        
+        let isDateValid = false;
+        for (let i = 0; i <= 2; i++) { // Aaj, Kal, aur Parson check karega
+            let checkDate = new Date();
+            checkDate.setDate(now.getDate() - i);
+            let d = checkDate.getDate().toString();
+            let m = checkDate.toLocaleString('default', { month: 'short' }).toLowerCase();
+            
+            if (text.includes(d) && text.includes(m)) {
+                isDateValid = true;
+                break;
+            }
+        }
+
+        // 3. SUCCESS CHECK
+        const isPaid = text.includes("success") || text.includes("completed") || text.includes("paid") || text.includes("sent");
+
+        procText.style.display = "none";
+
+        // FINAL VERIFICATION
+        if (!isCorrectAccount) {
+            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Rejected: Wrong Account! Please send to Muhammad Iqbal.</span>";
+        } 
+        else if (!isDateValid) {
+            finalResult.innerHTML = "<span style='color: #ff4444;'>❌ Your SS is Fake or too old (Max 2 days allowed).</span>";
+        }
+        else if (isPaid) {
+            finalResult.innerHTML = "<span style='color: #00ff00;'>✅ Verified! 100 Coins Added.</span>";
+            addCoinsToFirebase(100);
+        } else {
+            finalResult.innerHTML = "<span style='color: orange;'>⚠️ Transaction not successful.</span>";
+        }
+
+    } catch (err) {
+        procText.style.display = "none";
+        finalResult.innerHTML = "⚠️ Error reading image. Try again.";
+    }
+    }
+    
 </script>
 </body>
 </html>
