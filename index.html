@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9106759455230797" crossorigin="anonymous"></script>
-    
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.AH BATTLE GROUNDS 🔥</title>
@@ -55,6 +56,22 @@
         <button id="regBtn" onclick="showPage('register')">📝 JOIN</button>
     </div>
 </header>
+<div style="background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1.5px solid #ff4500; text-align: center; margin: 20px auto; max-width: 400px;">
+    <h3 style="color: #ff4500;">📤 Secure Payment Deposit</h3>
+    <p style="font-size: 11px; color: #888;">AI will verify your TRX Details instantly.</p>
+    
+    <input type="file" id="paymentScreenshot" accept="image/*" style="width: 90%; margin-bottom: 15px; background: #000; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px;">
+    
+    <button onclick="verifyAndProcess()" id="sendBtn" style="background: #ff4500; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer;">
+        🚀 Send & Verify SS
+    </button>
+
+    <div id="statusBox" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; background: #222; border: 1px solid #444;">
+        <p id="statusMsg" style="color: #ffcc00; font-weight: bold;"></p>
+        <button id="okBtn" onclick="addFinalCoins()" style="display: none; background: #37a832; color: white; border: none; padding: 8px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px;">CLAIM COINS (OK)</button>
+    </div>
+</div>
+
 
 <div id="home" class="page active">
     <div id="homeWallet" class="home-wallet hidden">
@@ -257,6 +274,54 @@ db.ref('liveMatches').on('value', snap => {
     });
     document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
 });
+async function verifyAndProcess() {
+    const fileInput = document.getElementById('paymentScreenshot');
+    const statusBox = document.getElementById('statusBox');
+    const statusMsg = document.getElementById('statusMsg');
+    const okBtn = document.getElementById('okBtn');
+    const sendBtn = document.getElementById('sendBtn');
+
+    if (fileInput.files.length === 0) {
+        alert("Pehle screenshot select karein!");
+        return;
+    }
+
+    sendBtn.disabled = true;
+    statusBox.style.display = "block";
+    statusMsg.innerHTML = "⏳ AI Bot: Verifying Payment Details... (2s)";
+
+    try {
+        // AI Reading Image
+        const result = await Tesseract.recognize(fileInput.files[0], 'eng');
+        const text = result.data.text.toLowerCase();
+
+        // 1. Check Name or Number
+        const isCorrectAccount = text.includes("03047391349") || text.includes("muhammad iqbal") || text.includes("iqbal");
+        
+        // 2. Check for Transaction Keywords
+        const hasTrx = text.includes("trx") || text.includes("tid") || text.includes("transaction") || text.includes("successfully");
+
+        setTimeout(() => {
+            if (isCorrectAccount && hasTrx) {
+                // AGAR SAB SAHI HAI
+                statusMsg.innerHTML = "<span style='color:#00ff00;'>✅ Payment Verified! Click OK to claim.</span>";
+                okBtn.style.display = "inline-block";
+            } else {
+                // AGAR DATA MATCH NAHI KIYA TO "FAKE" SHOW KAREGA
+                statusMsg.innerHTML = "<span style='color:#ff4444;'>❌ Rejected: Fake or Invalid Screenshot!</span>";
+                alert("Error: Ye screenshot Muhammad Iqbal ka nahi hai ya fake hai!");
+                sendBtn.disabled = false;
+                fileInput.value = ""; // Input khali kar do
+            }
+        }, 2000);
+
+    } catch (e) {
+        // Agar image bilkul hi kharab hai
+        statusMsg.innerHTML = "<span style='color:orange;'>⚠️ Scan Failed: Please upload a CLEAR original screenshot.</span>";
+        sendBtn.disabled = false;
+    }
+}
+
 </script>
 </body>
     </html>
