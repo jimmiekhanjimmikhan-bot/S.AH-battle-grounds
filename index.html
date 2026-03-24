@@ -1,12 +1,9 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async custom-element="amp-auto-ads"
+        <script async custom-element="amp-auto-ads"
         src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-    </script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-
+        </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.AH BATTLE GROUNDS 🔥</title>
@@ -20,314 +17,241 @@
         }
         body { 
             margin: 0; font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; 
-            border: 5px solid #ff4500; animation: fireMoving 1.5s infinite ease-in-out;
-            min-height: 100vh; padding-bottom: 80px; box-sizing: border-box;
+            border: 3px solid #ff4500; animation: fireMoving 1.5s infinite ease-in-out;
+            min-height: 100vh; padding-bottom: 80px; box-sizing: border-box; overflow-x: hidden;
         }
-        header { background: #000; border-bottom: 2px solid #ff4500; padding: 12px; position: sticky; top: 0; z-index: 1000; }
-        .header-top { display: flex; align-items: center; justify-content: center; position: relative; height: 40px; }
-        .back-btn { position: absolute; left: 0; background: none; border: none; color: #ff4500; font-size: 24px; cursor: pointer; display: none; font-weight: bold; }
-        .settings-btn { position: absolute; right: 0; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-        h1 { color: #ff4500; text-shadow: 0 0 10px #ff4500; margin: 0; font-size: 18px; }
-        .menu { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; margin-top:8px; }
-        .menu button { background: transparent; color: #fff; border: 1.2px solid #ff4500; padding: 6px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; cursor: pointer; }
+        header { background: #000; border-bottom: 2px solid #ff4500; padding: 10px; position: sticky; top: 0; z-index: 1000; display: none; align-items: center; justify-content: space-between; }
+        .nav-icon { font-size: 24px; color: #ff4500; cursor: pointer; background: none; border: none; font-weight: bold; }
+        h1 { color: #ff4500; text-shadow: 0 0 10px #ff4500; margin: 0; font-size: 14px; flex-grow: 1; text-transform: uppercase; }
+        .wallet-top { background: #1a1a1a; border: 1px solid #ff4500; padding: 4px 10px; border-radius: 20px; color: #ffcc00; font-size: 12px; cursor: pointer; }
+
+        .side-menu { position: fixed; left: -260px; top: 0; width: 250px; height: 100%; background: #000; z-index: 2000; transition: 0.3s; padding-top: 60px; text-align: left; border-right: 2px solid #ff4500; display: none; }
+        .side-menu.open { left: 0; }
+        .side-menu button { display: block; width: 90%; margin: 10px auto; background: #111; color: #fff; border: 1px solid #222; padding: 12px; border-radius: 8px; text-align: left; font-weight: bold; cursor: pointer;}
+        
         .page { display: none; padding: 15px; width: 100%; box-sizing: border-box; }
         .active { display: block !important; }
-        .rules-card { background: #111; border: 1.2px solid #ff4500; padding: 15px; border-radius: 12px; text-align: left; max-width: 360px; margin: auto; margin-bottom: 15px; }
-        .apply-btn { background: #ff4500; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 8px; }
-        .jazz-btn { background: #cc0000; color: white; padding: 10px; border-radius: 6px; border: none; font-weight: bold; flex: 1; cursor: pointer; }
-        .easy-btn { background: #37a832; color: white; padding: 10px; border-radius: 6px; border: none; font-weight: bold; flex: 1; cursor: pointer; }
-        input, select, textarea { width: 90%; padding: 12px; margin-bottom: 12px; background: #000; color: #fff; border: 1px solid #333; border-radius: 6px; display: block; margin: 10px auto; }
-        .hidden { display: none !important; }
-        .home-wallet { background: #1a1a1a; padding: 10px; border-radius: 10px; margin: 10px auto; max-width: 360px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .ss-warning { color: #ffcc00; font-size: 11px; text-align: center; display: block; margin-top: 5px; font-weight: bold; }
+        .rules-card { background: #111; border: 1.2px solid #ff4500; padding: 15px; border-radius: 12px; text-align: left; max-width: 400px; margin: 10px auto; }
+        .apply-btn { background: #ff4500; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
+        
+        input, select { width: 100%; padding: 12px; background: #000; color: #fff; border: 1px solid #333; border-radius: 8px; display: block; margin: 10px 0; box-sizing: border-box; }
+
+        /* Filters Styling */
+        .filter-box { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222; }
+        .filter-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+        .filter-container label { background: #222; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 10px; cursor: pointer; transition: 0.3s; }
+        .filter-container input[type="radio"]:checked + label { background: #ff4500; border-color: #ff4500; }
+        .filter-container input[type="radio"] { display: none; }
+
+        /* Stats Boxes */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .stat-box { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; text-align: center; }
+        .stat-box h4 { margin: 0; font-size: 9px; color: #888; text-transform: uppercase; }
+        .stat-box p { margin: 5px 0 0; font-size: 18px; color: #ff4500; font-weight: bold; }
+
+        .profile-img-container { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #ff4500; margin: 0 auto 10px; overflow: hidden; background: #222; }
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .welcome-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 <amp-auto-ads type="adsense"
         data-ad-client="ca-pub-9106759455230797">
 </amp-auto-ads>
-<header>
-    <div class="header-top">
-        <button id="backArrow" class="back-btn" onclick="showPage('home')">←</button>
-        <h1>S.AH BATTLE GROUNDS 🔥</h1>
-        <button id="setIco" class="settings-btn hidden" onclick="showPage('settingsPage')">⚙️</button>
-    </div>
-    <div class="menu">
-        <button onclick="showPage('home')">🏠 HOME</button>
-        <button onclick="showPage('plansPage')">💎 PLANS</button>
-        <button onclick="showPage('withdrawRatesPage')">💰 WITHDRAW</button>
-        <button id="profileBtn" class="hidden" onclick="showPage('profile')">👤 PROFILE</button>
-        <button id="loginBtn" onclick="showPage('login')">🔑 LOGIN</button>
-        <button id="regBtn" onclick="showPage('register')">📝 JOIN</button>
-    </div>
+<div id="welcomeScreen" class="welcome-screen">
+    <h1 style="color:#ff4500; font-size: 30px;">WELCOME TO S.AH BATTLEGROUNDS 🔥</h1>
+    <p style="color:#bbb; max-width: 320px; line-height: 1.6; margin-bottom: 40px;">
+        Join elite tournaments, showcase your pro skills, and earn real rewards. Your victory starts here!
+    </p>
+    <button class="apply-btn" style="width: 250px; font-size: 18px;" onclick="startApp()">GET STARTED</button>
+</div>
+
+<header id="mainHeader">
+    <button class="nav-icon" id="menuBtn" onclick="toggleMenu()">☰</button>
+    <button class="nav-icon hidden" id="backArrow" onclick="goBack()">←</button>
+    <h1>S.AH BATTLE GROUNDS</h1>
+    <div class="wallet-top" onclick="showPage('depositPage')">🪙 <span id="topCoins">0</span></div>
 </header>
-<div style="background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1.5px solid #ff4500; text-align: center; margin: 20px auto; max-width: 400px;">
-    <h3 style="color: #ff4500;">📤 Secure Payment Deposit</h3>
-    <p style="font-size: 11px; color: #888;">AI will verify your TRX Details instantly.</p>
-    
-    <input type="file" id="paymentScreenshot" accept="image/*" style="width: 90%; margin-bottom: 15px; background: #000; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px;">
-    
-    <button onclick="verifyAndProcess()" id="sendBtn" style="background: #ff4500; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer;">
-        🚀 Send & Verify SS
-    </button>
 
-    <div id="statusBox" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; background: #222; border: 1px solid #444;">
-        <p id="statusMsg" style="color: #ffcc00; font-weight: bold;"></p>
-        <button id="okBtn" onclick="addFinalCoins()" style="display: none; background: #37a832; color: white; border: none; padding: 8px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px;">CLAIM COINS (OK)</button>
-    </div>
+<div id="sideMenu" class="side-menu">
+    <button onclick="showPage('home')">🏠 HOME</button>
+    <button onclick="showPage('dashboard')">📊 DASHBOARD</button>
+    <button onclick="showPage('profile')">👤 PROFILE</button>
+    <button onclick="showPage('depositPage')">➕ DEPOSIT</button>
+    <button onclick="showPage('withdrawPage')">💸 WITHDRAW</button>
+    <button onclick="showPage('screenshotPage')">📸 SEND SCREENSHOT</button>
+    <button style="color:#ff0000; margin-top: 20px;" onclick="logout()">LOGOUT</button>
 </div>
 
-
-<div id="home" class="page active">
-    <div id="homeWallet" class="home-wallet hidden">
-        <div><span style="color:#aaa; font-size:11px;">Coins:</span><br><b style="color:#ffcc00; font-size:18px;">🪙 <span id="userCoinsHome">0</span></b></div>
-        <button onclick="showPage('depositPage')" style="background:#ffcc00; color:#000; border:none; padding:8px 15px; border-radius:8px; font-weight:bold; font-size:11px;">+ RECHARGE</button>
-    </div>
-    <div id="dynamicMatches">Loading Matches...</div>
-</div>
-
-<div id="plansPage" class="page">
-    <h2 style="color:#ff4500;">CHOOSE PLAN</h2>
+<div id="register" class="page">
     <div class="rules-card">
-        <h3>BASIC - 🪙 1000</h3>
-        <p>Withdraw: 2nd Day. Fast Support.</p>
-        <button class="apply-btn" onclick="buyPlan('Basic', 1000)">BUY BASIC</button>
-        <span class="ss-warning">Send Screenshot after payment!</span>
-    </div>
-    <div class="rules-card" style="border-color:#ffcc00;">
-        <h3>PREMIUM - 🪙 5000</h3>
-        <p>Withdraw: Same Night. No Free Matches.</p>
-        <button class="apply-btn" style="background:#ffcc00; color:#000;" onclick="buyPlan('Premium', 5000)">BUY PREMIUM</button>
-        <span class="ss-warning">Send Screenshot after payment!</span>
-    </div>
-    <div class="rules-card" style="border-color:#00ff00;">
-        <h3>ULTRA - 🪙 10000</h3>
-        <p>Withdraw: Instant. Free Matches OK.</p>
-        <button class="apply-btn" style="background:#00ff00; color:#000;" onclick="buyPlan('Ultra', 10000)">BUY ULTRA</button>
-        <span class="ss-warning">Send Screenshot after payment!</span>
+        <h2 style="color:#ff4500; text-align:center;">JOIN SQUAD</h2>
+        <input type="text" id="regP" placeholder="Full Name">
+        <input type="text" id="regU" placeholder="Game UID">
+        <input type="email" id="regE" placeholder="Email Address">
+        <input type="password" id="regS" placeholder="Password">
+        <button class="apply-btn" onclick="registerUser()">JOIN NOW</button>
+        <p style="font-size:12px; text-align:center; color:#888;">Already have an account? <span style="color:#ff4500; cursor:pointer;" onclick="showPage('login')">Login Here</span></p>
     </div>
 </div>
 
-<div id="withdrawPage" class="page">
+<div id="login" class="page">
     <div class="rules-card">
-        <h3 style="text-align:center; color:#ff4500;">WITHDRAWAL FORM</h3>
-        <select id="wdMethod"><option value="JazzCash">JazzCash</option><option value="EasyPaisa">EasyPaisa</option></select>
-        <input type="text" id="wdHolder" placeholder="Account Holder Name">
-        <input type="number" id="wdNumber" placeholder="Mobile Number">
-        <input type="number" id="wdAmount" placeholder="Amount of Coins">
-        <button class="apply-btn" onclick="submitWithdraw()">SUBMIT REQUEST</button>
+        <h2 style="color:#ff4500; text-align:center;">LOGIN</h2>
+        <input type="email" id="logE" placeholder="Email">
+        <input type="password" id="logS" placeholder="Password">
+        <button class="apply-btn" onclick="loginUser()">LOGIN</button>
+        <p style="font-size:12px; text-align:center; color:#888;">New player? <span style="color:#ff4500; cursor:pointer;" onclick="showPage('register')">Create Account</span></p>
+    </div>
+</div>
+
+<div id="home" class="page">
+    <div class="filter-box">
+        <div class="filter-container">
+            <input type="radio" name="m" id="br" checked><label for="br">BR CLASSIC</label>
+            <input type="radio" name="m" id="cs"><label for="cs">CS CLASSIC</label>
+            <input type="radio" name="m" id="v1"><label for="v1">1 VS 1</label>
+            <input type="radio" name="sub" id="solo" checked><label for="solo">SOLO</label>
+            <input type="radio" name="sub" id="duo"><label for="duo">DUO</label>
+            <input type="radio" name="sub" id="squad"><label for="squad">SQUAD</label>
+        </div>
+    </div>
+    <div id="matchList">Loading Matches...</div>
+</div>
+
+<div id="dashboard" class="page">
+    <h3 style="color:#ff4500; text-align:left;">MY STATISTICS</h3>
+    <div class="stats-grid">
+        <div class="stat-box"><h4>TOTAL JOINED</h4><p id="statJoined">0</p></div>
+        <div class="stat-box"><h4>TOTAL WINS</h4><p id="statWins">0</p></div>
+        <div class="stat-box"><h4>DEPOSITS</h4><p style="font-size:10px; color:#00ff00;">STAY UPDATED</p></div>
+        <div class="stat-box"><h4>WITHDRAWS</h4><p style="font-size:10px; color:#ffcc00;">STAY UPDATED</p></div>
+    </div>
+    <h3 style="color:#ff4500; text-align:left;">QUICK MENU</h3>
+    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('profile')">👤 VIEW PROFILE <span style="float:right;">➔</span></button>
+    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('depositPage')">➕ DEPOSIT COINS <span style="float:right;">➔</span></button>
+    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('withdrawPage')">💸 WITHDRAW EARNINGS <span style="float:right;">➔</span></button>
+    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('screenshotPage')">📸 SEND SCREENSHOT <span style="float:right;">➔</span></button>
+</div>
+
+<div id="profile" class="page">
+    <div class="rules-card" style="text-align:center;">
+        <div class="profile-img-container"><img src="https://via.placeholder.com/100" id="userPic"></div>
+        <button class="apply-btn" style="background:#333; width:auto; font-size:10px;" onclick="document.getElementById('imgInp').click()">CHANGE PHOTO</button>
+        <input type="file" id="imgInp" hidden onchange="previewImg(this)">
+        <div style="text-align:left; margin-top:20px;">
+            <label style="color:#666; font-size:10px;">NAME</label><p id="pName">---</p>
+            <label style="color:#666; font-size:10px;">UID</label><p id="pUid">---</p>
+            <label style="color:#666; font-size:10px;">EMAIL</label><p id="pEmail">---</p>
+        </div>
+        <button class="apply-btn" style="background:#ba1111;" onclick="logout()">LOGOUT</button>
     </div>
 </div>
 
 <div id="depositPage" class="page">
     <div class="rules-card">
-        <h3 style="text-align:center; color:#ffcc00;">RECHARGE COINS</h3>
-        <div style="background:#222; padding:10px; border-radius:8px; font-size:14px;">
-            💰 Rs 100 = 50 Coins<br>
-            💰 Rs 200 = 100 Coins<br>
-            💰 Rs 1000 = 500 Coins
+        <h2 style="color:#ffae00;">DEPOSIT COINS</h2>
+        <select id="coinAmt">
+            <option value="100">Rs. 100 (50 Coins)</option>
+            <option value="500">Rs. 500 (250 Coins)</option>
+            <option value="1000">Rs. 1000 (500 Coins)</option>
+        </select>
+        <div style="background:#000; border:1px dashed #ff4500; padding:10px; margin:10px 0; text-align:center;">
+            <b>ADMIN: 03047391349</b><br><small>JazzCash / EasyPaisa</small>
         </div>
-        <p class="ss-warning">Payment ke baad screenshot lazmi bhejein!</p>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="jazz-btn" onclick="window.location.href='tel:*786#'">JAZZCASH</button>
-            <button class="easy-btn" onclick="alert('EasyPaisa App Opening...')">EASYPAISA</button>
+        <div style="display:flex; gap:10px;">
+            <button class="apply-btn" style="background:#ba1111;" onclick="pay('jazz')">JAZZCASH</button>
+            <button class="apply-btn" style="background:#1f8b37;" onclick="pay('easy')">EASYPAISA</button>
         </div>
+        <button class="apply-btn" style="background:#333; margin-top:15px;" onclick="showPage('screenshotPage')">UPLOAD SCREENSHOT</button>
     </div>
 </div>
 
-<div id="matchDetailsPage" class="page">
+<div id="withdrawPage" class="page">
     <div class="rules-card">
-        <h2 id="detMatchName" style="color:#ff4500; text-align:center;">Match Details</h2>
-        <div id="coinsLocked" class="hidden">
-            <p style="color:red; text-align:center;">⚠️ 100+ Coins required to see Room ID & Password.</p>
-            <button class="apply-btn" onclick="showPage('depositPage')">Recharge Now</button>
-        </div>
-        <div id="coinsUnlocked" class="hidden">
-            <p>🆔 Room ID: <b id="detRoomId" style="color:#00ff00;"></b></p>
-            <p>🔑 Password: <b id="detPass" style="color:#00ff00;"></b></p>
-            <button class="apply-btn" style="background:green;" onclick="showPage('joinMatchForm')">JOINED SUCCESSFULLY</button>
-        </div>
+        <h2>WITHDRAW</h2>
+        <input type="text" placeholder="Account Name">
+        <select><option>EasyPaisa</option><option>JazzCash</option></select>
+        <input type="number" placeholder="Account Number">
+        <input type="number" placeholder="Coins">
+        <button class="apply-btn" onclick="alert('Submitted!')">SUBMIT REQUEST</button>
     </div>
 </div>
 
-<div id="profile" class="page">
-    <div class="rules-card" style="text-align: center;">
-        <img id="userImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:80px; height:80px; border-radius:50%; border:2px solid #ff4500; object-fit: cover;">
-        <input type="file" id="imgInput" style="display:none;" onchange="uploadProfileImg(this)">
-        <button onclick="document.getElementById('imgInput').click()" style="background:none; color:#ff4500; border:none; font-size:11px; cursor:pointer; display:block; margin:5px auto;">Change Photo 📷</button>
-        <h3 id="profNameDisplay">User</h3>
-        <p>Plan: <b id="profPlan" style="color:#00ff00;">Free</b></p>
-        <p>Balance: <b style="color:#ffcc00;">🪙 <span id="userBalance">0</span></b></p>
-        <button class="apply-btn" onclick="showPage('withdrawPage')">WITHDRAW NOW</button>
+<div id="screenshotPage" class="page">
+    <div class="rules-card">
+        <h2>UPLOAD PROOF</h2>
+        <p style="color:red; font-size:10px;">⚠️ Bina SS ke coins add nahi honge.</p>
+        <input type="number" placeholder="Amount Sent">
+        <input type="file">
+        <button class="apply-btn">SEND TO ADMIN</button>
     </div>
 </div>
-
-<div id="settingsPage" class="page"><div class="rules-card"><button class="apply-btn" onclick="showPage('inspectorPage')">🕵️ Become Inspector</button><button class="apply-btn" onclick="showPage('complaintPage')">📧 Send Complaint</button><button class="apply-btn" style="background:red;" onclick="logout()">LOGOUT</button></div></div>
-<div id="inspectorPage" class="page"><div class="rules-card"><h3>INSPECTOR</h3><input type="text" id="insName" placeholder="Name"><input type="text" id="insUid" placeholder="UID"><input type="number" id="insLevel" placeholder="Level"><button class="apply-btn" onclick="submitInspector()">SUBMIT</button></div></div>
-<div id="complaintPage" class="page"><div class="rules-card"><h3>COMPLAINT</h3><textarea id="compText" placeholder="Describe issue..."></textarea><button class="apply-btn" onclick="submitComplaint()">SEND</button></div></div>
-<div id="joinMatchForm" class="page"><div class="rules-card"><h3>JOINING FORM</h3><input type="text" id="jmName" placeholder="Game Name"><input type="text" id="jmUid" placeholder="Game UID"><input type="number" id="jmLevel" placeholder="Level"><button class="apply-btn" onclick="submitJoinMatch()">SUBMIT</button></div></div>
-<div id="login" class="page"><div class="rules-card"><h2>LOGIN</h2><input type="email" id="logE" placeholder="Email"><input type="password" id="logS" placeholder="Pass"><button class="apply-btn" onclick="loginUser()">LOGIN</button></div></div>
-<div id="register" class="page"><div class="rules-card"><h2>JOIN</h2><input type="text" id="regP" placeholder="Full Name"><input type="text" id="regU" placeholder="Game UID"><input type="email" id="regE" placeholder="Email"><input type="password" id="regS" placeholder="Pass"><button class="apply-btn" onclick="registerUser()">JOIN</button></div></div>
-<div id="withdrawRatesPage" class="page"><div class="rules-card"><h2>RATES</h2><p>100 COINS = 50 RS</p><button class="apply-btn" onclick="showPage('withdrawPage')">PROCEED</button></div></div>
 
 <script>
 const firebaseConfig = { apiKey: "AIzaSyArrJJlxbvMVUjnw19yvmp0Z0Y1uKUHDNo", databaseURL: "https://sahbattlegrounds-default-rtdb.firebaseio.com/" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-let currentUserCoins = 0;
+const adminNum = "03047391349";
 
+function startApp() { document.getElementById("welcomeScreen").style.display = "none"; showPage('register'); }
+function toggleMenu() { document.getElementById("sideMenu").classList.toggle("open"); }
 function showPage(p){ 
     document.querySelectorAll(".page").forEach(pg => pg.classList.remove("active")); 
     document.getElementById(p).classList.add("active");
-    document.getElementById("backArrow").style.display = (p === 'home') ? "none" : "block";
-}
-
-function openMatchDetails(name, roomId, pass) {
-    if(!localStorage.getItem("user")) return alert("Login First!");
-    document.getElementById('detMatchName').innerText = name;
-    document.getElementById('detRoomId').innerText = roomId || "---";
-    document.getElementById('detPass').innerText = pass || "---";
-    if(currentUserCoins >= 100) {
-        document.getElementById('coinsUnlocked').classList.remove('hidden');
-        document.getElementById('coinsLocked').classList.add('hidden');
+    document.getElementById("sideMenu").classList.remove("open");
+    let user = localStorage.getItem("user");
+    if(user && (p !== 'login' && p !== 'register')) {
+        document.getElementById("mainHeader").style.display = "flex";
+        document.getElementById("sideMenu").style.display = "block";
     } else {
-        document.getElementById('coinsLocked').classList.remove('hidden');
-        document.getElementById('coinsUnlocked').classList.add('hidden');
-    }
-    showPage('matchDetailsPage');
-}
-
-function checkUserStatus(){
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(user){
-        document.getElementById("loginBtn").classList.add("hidden");
-        document.getElementById("regBtn").classList.add("hidden");
-        document.getElementById("profileBtn").classList.remove("hidden");
-        document.getElementById("homeWallet").classList.remove("hidden");
-        document.getElementById("setIco").classList.remove("hidden");
-        db.ref('allPlayers/'+user.u).on('value', s => {
-            let d = s.val(); if(d) {
-                currentUserCoins = d.points || 0;
-                document.getElementById("userCoinsHome").innerText = currentUserCoins;
-                document.getElementById("userBalance").innerText = currentUserCoins;
-                document.getElementById("profNameDisplay").innerText = d.p;
-                document.getElementById("profPlan").innerText = d.plan || "Free";
-                if(d.img) document.getElementById("userImg").src = d.img;
-            }
-        });
+        document.getElementById("mainHeader").style.display = "none";
+        document.getElementById("sideMenu").style.display = "none";
     }
 }
-
-function uploadProfileImg(i){
-    let file = i.files[0];
-    let reader = new FileReader();
-    reader.onload = (e) => {
-        let user = JSON.parse(localStorage.getItem("user"));
-        db.ref('allPlayers/'+user.u+'/img').set(e.target.result).then(()=>alert("Photo Updated!"));
-    };
-    reader.readAsDataURL(file);
-}
-
-function submitWithdraw() {
-    let holder = document.getElementById('wdHolder').value;
-    let num = document.getElementById('wdNumber').value;
-    let amt = parseInt(document.getElementById('wdAmount').value);
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(!holder || !num || !amt) return alert("Fill all fields!");
-    if(amt > currentUserCoins) return alert("Low Balance!");
-    db.ref('withdrawRequests').push({ uid: user.u, name: holder, num: num, amount: amt, status: 'pending' }).then(() => { alert("Sent!"); showPage('home'); });
-}
-
-function submitJoinMatch() {
-    let name = document.getElementById('jmName').value;
-    let uid = document.getElementById('jmUid').value;
-    let level = document.getElementById('jmLevel').value;
-    let user = JSON.parse(localStorage.getItem("user"));
-    db.ref('matchParticipants').push({ userUid: user.u, gameName: name, gameUid: uid, level: level, match: document.getElementById('detMatchName').innerText })
-    .then(() => { alert("Joined!"); showPage('home'); });
-}
-
-function buyPlan(plan, price) {
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(currentUserCoins < price) return alert("Low Coins!");
-    db.ref('allPlayers/'+user.u).update({ points: currentUserCoins - price, plan: plan }).then(() => alert(plan + " Active!"));
-}
-
-function loginUser(){
-    let email = document.getElementById('logE').value, pass = document.getElementById('logS').value;
-    db.ref('allPlayers').once('value', snap => {
-        snap.forEach(child => {
-            let d = child.val();
-            if(d.e === email && d.s === pass){ localStorage.setItem("user", JSON.stringify(d)); location.reload(); }
-        });
-    });
-}
+function goBack() { showPage('home'); }
+function previewImg(input) { if (input.files && input.files[0]) { let r = new FileReader(); r.onload = e => document.getElementById('userPic').src = e.target.result; r.readAsDataURL(input.files[0]); } }
 
 function registerUser(){
     let p = document.getElementById('regP').value, u = document.getElementById('regU').value, e = document.getElementById('regE').value, s = document.getElementById('regS').value;
-    db.ref('allPlayers/'+u).set({p, u, e, s, points:0, plan:"Free"}).then(()=> { localStorage.setItem("user", JSON.stringify({p,u,e,s})); location.reload(); });
-}
-
-function logout(){ localStorage.clear(); location.reload(); }
-window.onload = checkUserStatus;
-
-db.ref('liveMatches').on('value', snap => {
-    let html = "";
-    snap.forEach(c => {
-        let m = c.val();
-        html += `<div class="rules-card" style="padding:0; overflow:hidden;"><img src="${m.image}" style="width:100%;"><div style="padding:15px;"><h3>${m.name}</h3><button class="apply-btn" onclick="openMatchDetails('${m.name}', '${m.roomId}', '${m.password}')">JOIN MATCH</button></div></div>`;
+    if(!p || !u || !e || !s) return alert("Fill all!");
+    db.ref('allPlayers/'+u).set({p,u,e,s,points:0,wins:0,joined:0}).then(()=> { 
+        localStorage.setItem("user", JSON.stringify({p,u,e,s})); updateUI({p,u,e,s});
     });
-    document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
-});
-async function verifyAndProcess() {
-    const fileInput = document.getElementById('paymentScreenshot');
-    const statusBox = document.getElementById('statusBox');
-    const statusMsg = document.getElementById('statusMsg');
-    const okBtn = document.getElementById('okBtn');
-    const sendBtn = document.getElementById('sendBtn');
-
-    if (fileInput.files.length === 0) {
-        alert("Pehle screenshot select karein!");
-        return;
-    }
-
-    sendBtn.disabled = true;
-    statusBox.style.display = "block";
-    statusMsg.innerHTML = "⏳ AI Bot: Verifying Payment Details... (2s)";
-
-    try {
-        // AI Reading Image
-        const result = await Tesseract.recognize(fileInput.files[0], 'eng');
-        const text = result.data.text.toLowerCase();
-
-        // 1. Check Name or Number
-        const isCorrectAccount = text.includes("03047391349") || text.includes("muhammad iqbal") || text.includes("iqbal");
-        
-        // 2. Check for Transaction Keywords
-        const hasTrx = text.includes("trx") || text.includes("tid") || text.includes("transaction") || text.includes("successfully");
-
-        setTimeout(() => {
-            if (isCorrectAccount && hasTrx) {
-                // AGAR SAB SAHI HAI
-                statusMsg.innerHTML = "<span style='color:#00ff00;'>✅ Payment Verified! Click OK to claim.</span>";
-                okBtn.style.display = "inline-block";
-            } else {
-                // AGAR DATA MATCH NAHI KIYA TO "FAKE" SHOW KAREGA
-                statusMsg.innerHTML = "<span style='color:#ff4444;'>❌ Rejected: Fake or Invalid Screenshot!</span>";
-                alert("Error: Ye screenshot Muhammad Iqbal ka nahi hai ya fake hai!");
-                sendBtn.disabled = false;
-                fileInput.value = ""; // Input khali kar do
-            }
-        }, 2000);
-
-    } catch (e) {
-        // Agar image bilkul hi kharab hai
-        statusMsg.innerHTML = "<span style='color:orange;'>⚠️ Scan Failed: Please upload a CLEAR original screenshot.</span>";
-        sendBtn.disabled = false;
+}
+function loginUser(){
+    let e = document.getElementById('logE').value, s = document.getElementById('logS').value;
+    db.ref('allPlayers').once('value', snap => {
+        snap.forEach(child => { if(child.val().e === e && child.val().s === s){ localStorage.setItem("user", JSON.stringify(child.val())); updateUI(child.val()); } });
+    });
+}
+function pay(type) {
+    let amt = document.getElementById('coinAmt').value;
+    window.location.href = `tel:*786*1*1*${adminNum}*${amt}%23`;
+    setTimeout(() => { window.location.href = type === 'jazz' ? "jazzcash://" : "easypaisa://"; }, 2000);
+}
+function updateUI(user){
+    if(user){
+        document.getElementById("welcomeScreen").style.display = "none";
+        document.getElementById("pName").innerText = user.p;
+        document.getElementById("pUid").innerText = user.u;
+        document.getElementById("pEmail").innerText = user.e;
+        db.ref('allPlayers/'+user.u).on('value', s => {
+            let d = s.val() || {};
+            document.getElementById("topCoins").innerText = d.points || 0;
+            document.getElementById("statJoined").innerText = d.joined || 0;
+            document.getElementById("statWins").innerText = d.wins || 0;
+        });
+        showPage('home');
     }
 }
+function logout(){ localStorage.clear(); window.location.reload(); }
+window.onload = () => { let user = JSON.parse(localStorage.getItem("user")); if(user) updateUI(user); };
+// --- 1. Tesseract Library Load Karein (Head mein add karein) ---
+// <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+
 
 </script>
 </body>
-    </html>
-            
+                </html>
+                
