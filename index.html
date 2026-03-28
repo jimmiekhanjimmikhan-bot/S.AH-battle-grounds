@@ -251,7 +251,15 @@ window.onload = () => { let user = JSON.parse(localStorage.getItem("user")); if(
 // --- 1. Tesseract Library Load Karein (Head mein add karein) ---
 // <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
-
+db.ref('liveMatches').on('value', snap => {
+    let html = "";
+    snap.forEach(c => {
+        let m = c.val();
+        html += `<div class="rules-card" style="padding:0; overflow:hidden;"><img src="${m.image}" style="width:100%;"><div style="padding:15px;"><h3>${m.name}</h3><button class="apply-btn" onclick="openMatchDetails('${m.name}', '${m.roomId}', '${m.password}')">JOIN MATCH</button></div></div>`;
+    });
+    document.getElementById("dynamicMatches").innerHTML = html || "No Matches.";
+});
+   
 </script>
 </body>
                 </html>
