@@ -190,23 +190,7 @@
 </div>
 
 <script>
-    let html = "";
-    if (snap.exists()) {
-        snap.forEach(c => {
-            let m = c.val();
-            html += `<div class="rules-card" style="padding:0; overflow:hidden;">
-                        <img src="${m.image}" style="width:100%;">
-                        <div style="padding:15px;">
-                            <h3>${m.name}</h3>
-                            <button class="apply-btn" onclick="openMatchDetails('${m.name}', '${m.roomId}', '${m.password}')">JOIN MATCH</button>
-                        </div>
-                     </div>`;
-        });
-    } else {
-        html = "<p style='color:#00ff41;'>No Matches in Database!</p>";
-    }
-    document.getElementById("dynamicMatches").innerHTML = html;
-});
+    
 const firebaseConfig = { apiKey: "AIzaSyArrJJlxbvMVUjnw19yvmp0Z0Y1uKUHDNo", databaseURL: "https://sahbattlegrounds-default-rtdb.firebaseio.com/" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
