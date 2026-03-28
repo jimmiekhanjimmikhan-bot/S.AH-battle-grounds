@@ -250,7 +250,6 @@ function logout(){ localStorage.clear(); window.location.reload(); }
 window.onload = () => { let user = JSON.parse(localStorage.getItem("user")); if(user) updateUI(user); };
 // --- 1. Tesseract Library Load Karein (Head mein add karein) ---
 // <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
 db.ref('liveMatches').on('value', snap => {
     let html = "";
     snap.forEach(c => {
