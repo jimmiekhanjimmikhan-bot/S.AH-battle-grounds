@@ -1,259 +1,395 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-        <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-        </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.AH BATTLE GROUNDS 🔥</title>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
     <style>
-        @keyframes fireMoving {
-            0% { border-color: #ff4500; box-shadow: 0 0 15px #ff4500; }
-            50% { border-color: #ffae00; box-shadow: 0 0 25px #ffae00; }
-            100% { border-color: #ff4500; box-shadow: 0 0 15px #ff4500; }
-        }
-        body { 
-            margin: 0; font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; 
-            border: 3px solid #ff4500; animation: fireMoving 1.5s infinite ease-in-out;
-            min-height: 100vh; padding-bottom: 80px; box-sizing: border-box; overflow-x: hidden;
-        }
-        header { background: #000; border-bottom: 2px solid #ff4500; padding: 10px; position: sticky; top: 0; z-index: 1000; display: none; align-items: center; justify-content: space-between; }
-        .nav-icon { font-size: 24px; color: #ff4500; cursor: pointer; background: none; border: none; font-weight: bold; }
-        h1 { color: #ff4500; text-shadow: 0 0 10px #ff4500; margin: 0; font-size: 14px; flex-grow: 1; text-transform: uppercase; }
-        .wallet-top { background: #1a1a1a; border: 1px solid #ff4500; padding: 4px 10px; border-radius: 20px; color: #ffcc00; font-size: 12px; cursor: pointer; }
+        :root { --primary: #ff4500; --secondary: #ffae00; --bg: #000; }
+        @property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+        @keyframes rotate-angle { to { --angle: 360deg; } }
 
-        .side-menu { position: fixed; left: -260px; top: 0; width: 250px; height: 100%; background: #000; z-index: 2000; transition: 0.3s; padding-top: 60px; text-align: left; border-right: 2px solid #ff4500; display: none; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
+        body::before { content: ""; position: fixed; inset: 0; border: 4px solid transparent; border-radius: 25px; background: conic-gradient(from var(--angle), transparent, var(--primary), var(--secondary), var(--primary), transparent) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; pointer-events: none; z-index: 9999; animation: rotate-angle 3s linear infinite; }
+
+        header { background: #000; border-bottom: 1px solid #222; padding: 12px; position: sticky; top: 0; z-index: 1000; display: none; align-items: center; justify-content: space-between; }
+        .header-profile-img { width: 35px; height: 35px; border-radius: 8px; border: 1.5px solid var(--primary); object-fit: cover; cursor: pointer; }
+
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+        .active { display: block !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stat-box { background: #111; border: 1px solid #222; padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 14px; background: #000; color: #fff; border: 1px solid var(--primary); border-radius: 12px; margin: 10px 0; box-sizing: border-box; }
+        .apply-btn { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+
+        .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .hub-card { background: #151515; border: 1px solid #333; padding: 15px 5px; border-radius: 15px; text-align: center; cursor: pointer; font-size: 11px; font-weight: bold; }
+
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 14px; }
+
+        .bot-container { border: 2px dashed var(--primary); padding: 20px; border-radius: 20px; text-align: center; position: relative; overflow: hidden; margin-top: 10px; }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: cyan; box-shadow: 0 0 15px cyan; display: none; animation: scanAnim 2s infinite linear; }
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
+
+        .match-img { width: 100%; height: 160px; border-radius: 12px; object-fit: cover; background: #222; margin-bottom: 10px; display: block; border: 1px solid #333; }
+        
+        .google-circle { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 20px auto 10px auto; cursor: pointer; }
+
+        .side-menu { position: fixed; left: -260px; top: 0; width: 250px; height: 100%; background: #0a0a0a; z-index: 10000; transition: 0.4s ease; padding-top: 60px; border-right: 1px solid var(--primary); }
         .side-menu.open { left: 0; }
-        .side-menu button { display: block; width: 90%; margin: 10px auto; background: #111; color: #fff; border: 1px solid #222; padding: 12px; border-radius: 8px; text-align: left; font-weight: bold; cursor: pointer;}
+        .side-menu button { display: block; width: 90%; margin: 10px auto; background: #151515; color: #fff; border: 1px solid #222; padding: 14px; border-radius: 12px; text-align: left; cursor: pointer; }
         
-        .page { display: none; padding: 15px; width: 100%; box-sizing: border-box; }
-.active { display: block !important; }
-       
-        .rules-card { background: #111; border: 1.2px solid #ff4500; padding: 15px; border-radius: 12px; text-align: left; max-width: 400px; margin: 10px auto; }
-        .apply-btn { background: #ff4500; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
-        
-        input, select { width: 100%; padding: 12px; background: #000; color: #fff; border: 1px solid #333; border-radius: 8px; display: block; margin: 10px 0; box-sizing: border-box; }
+        .room-info-box { background: #051a05; border: 2px solid #00ff00; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: none; text-align: center; }
 
-        /* Filters Styling */
-        .filter-box { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222; }
-        .filter-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-        .filter-container label { background: #222; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 10px; cursor: pointer; transition: 0.3s; }
-        .filter-container input[type="radio"]:checked + label { background: #ff4500; border-color: #ff4500; }
-        .filter-container input[type="radio"] { display: none; }
-
-        /* Stats Boxes */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .stat-box { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; text-align: center; }
-        .stat-box h4 { margin: 0; font-size: 9px; color: #888; text-transform: uppercase; }
-        .stat-box p { margin: 5px 0 0; font-size: 18px; color: #ff4500; font-weight: bold; }
-
-        .profile-img-container { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #ff4500; margin: 0 auto 10px; overflow: hidden; background: #222; }
-        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .welcome-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; box-sizing: border-box; }
+        .custom-alert-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 20000; justify-content: center; align-items: center; }
+        .custom-alert-box { background: #111; border: 2px solid var(--primary); border-radius: 15px; width: 85%; max-width: 400px; padding: 20px; text-align: center; box-shadow: 0 0 20px rgba(255, 69, 0, 0.4); }
+        .custom-alert-title { color: var(--primary); font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+        .custom-alert-msg { font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.5; }
+        .custom-alert-btn { background: var(--primary); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
-<amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-9106759455230797">
-</amp-auto-ads>
-<div id="welcomeScreen" class="welcome-screen">
-    <h1 style="color:#ff4500; font-size: 30px;">WELCOME TO S.AH BATTLEGROUNDS 🔥</h1>
-    <p style="color:#bbb; max-width: 320px; line-height: 1.6; margin-bottom: 40px;">
-        Join elite tournaments, showcase your pro skills, and earn real rewards. Your victory starts here!
-    </p>
-    <button class="apply-btn" style="width: 250px; font-size: 18px;" onclick="startApp()">GET STARTED</button>
-</div>
 
-<header id="mainHeader">
-    <button class="nav-icon" id="menuBtn" onclick="toggleMenu()">☰</button>
-    <button class="nav-icon hidden" id="backArrow" onclick="goBack()">←</button>
-    <h1>S.AH BATTLE GROUNDS</h1>
-    <div class="wallet-top" onclick="showPage('depositPage')">🪙 <span id="topCoins">0</span></div>
-</header>
-
-<div id="sideMenu" class="side-menu">
-    <button onclick="showPage('home')">🏠 HOME</button>
-    <button onclick="showPage('dashboard')">📊 DASHBOARD</button>
-    <button onclick="showPage('profile')">👤 PROFILE</button>
-    <button onclick="showPage('depositPage')">➕ DEPOSIT</button>
-    <button onclick="showPage('withdrawPage')">💸 WITHDRAW</button>
-    <button onclick="showPage('screenshotPage')">📸 SEND SCREENSHOT</button>
-    <button style="color:#ff0000; margin-top: 20px;" onclick="logout()">LOGOUT</button>
-</div>
-
-<div id="register" class="page">
-    <div class="rules-card">
-        <h2 style="color:#ff4500; text-align:center;">JOIN SQUAD</h2>
-        <input type="text" id="regP" placeholder="Full Name">
-        <input type="text" id="regU" placeholder="Game UID">
-        <input type="email" id="regE" placeholder="Email Address">
-        <input type="password" id="regS" placeholder="Password">
-        <button class="apply-btn" onclick="registerUser()">JOIN NOW</button>
-        <p style="font-size:12px; text-align:center; color:#888;">Already have an account? <span style="color:#ff4500; cursor:pointer;" onclick="showPage('login')">Login Here</span></p>
-    </div>
-</div>
-
-<div id="login" class="page">
-    <div class="rules-card">
-        <h2 style="color:#ff4500; text-align:center;">LOGIN</h2>
-        <input type="email" id="logE" placeholder="Email">
-        <input type="password" id="logS" placeholder="Password">
-        <button class="apply-btn" onclick="loginUser()">LOGIN</button>
-        <p style="font-size:12px; text-align:center; color:#888;">New player? <span style="color:#ff4500; cursor:pointer;" onclick="showPage('register')">Create Account</span></p>
-    </div>
-</div>
-
-<div id="home" class="page">
-    <div class="filter-box">
-        <div class="filter-container">
-            <input type="radio" name="m" id="br" checked><label for="br">BR CLASSIC</label>
-            <input type="radio" name="m" id="cs"><label for="cs">CS CLASSIC</label>
-            <input type="radio" name="m" id="v1"><label for="v1">1 VS 1</label>
-            <input type="radio" name="sub" id="solo" checked><label for="solo">SOLO</label>
-            <input type="radio" name="sub" id="duo"><label for="duo">DUO</label>
-            <input type="radio" name="sub" id="squad"><label for="squad">SQUAD</label>
+    <div class="custom-alert-bg" id="customAlert">
+        <div class="custom-alert-box">
+            <div class="custom-alert-title" id="alertTitle">MESSAGE</div>
+            <div class="custom-alert-msg" id="alertMsg">Loading...</div>
+            <button class="custom-alert-btn" onclick="closeAlert()">OK</button>
         </div>
     </div>
-    <div id="matchList">Loading Matches...</div>
-</div>
 
-<div id="dashboard" class="page">
-    <h3 style="color:#ff4500; text-align:left;">MY STATISTICS</h3>
-    <div class="stats-grid">
-        <div class="stat-box"><h4>TOTAL JOINED</h4><p id="statJoined">0</p></div>
-        <div class="stat-box"><h4>TOTAL WINS</h4><p id="statWins">0</p></div>
-        <div class="stat-box"><h4>DEPOSITS</h4><p style="font-size:10px; color:#00ff00;">STAY UPDATED</p></div>
-        <div class="stat-box"><h4>WITHDRAWS</h4><p style="font-size:10px; color:#ffcc00;">STAY UPDATED</p></div>
-    </div>
-    <h3 style="color:#ff4500; text-align:left;">QUICK MENU</h3>
-    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('profile')">👤 VIEW PROFILE <span style="float:right;">➔</span></button>
-    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('depositPage')">➕ DEPOSIT COINS <span style="float:right;">➔</span></button>
-    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('withdrawPage')">💸 WITHDRAW EARNINGS <span style="float:right;">➔</span></button>
-    <button class="apply-btn" style="background:#111; border:1px solid #333; text-align:left;" onclick="showPage('screenshotPage')">📸 SEND SCREENSHOT <span style="float:right;">➔</span></button>
-</div>
-
-<div id="profile" class="page">
-    <div class="rules-card" style="text-align:center;">
-        <div class="profile-img-container"><img src="https://via.placeholder.com/100" id="userPic"></div>
-        <button class="apply-btn" style="background:#333; width:auto; font-size:10px;" onclick="document.getElementById('imgInp').click()">CHANGE PHOTO</button>
-        <input type="file" id="imgInp" hidden onchange="previewImg(this)">
-        <div style="text-align:left; margin-top:20px;">
-            <label style="color:#666; font-size:10px;">NAME</label><p id="pName">---</p>
-            <label style="color:#666; font-size:10px;">UID</label><p id="pUid">---</p>
-            <label style="color:#666; font-size:10px;">EMAIL</label><p id="pEmail">---</p>
+    <header id="mainHeader">
+        <div style="display: flex; align-items: center;">
+            <button id="backBtn" style="background:none; border:none; color:var(--primary); font-size:20px; display:none; margin-right:10px;" onclick="showPage('dashboard')">❮</button>
+            <img src="https://via.placeholder.com/40" id="hImg" class="header-profile-img" onclick="showPage('profilePage')">
+            <button style="background:none; border:none; color:var(--primary); font-size:26px; margin-left:10px;" onclick="toggleMenu()">☰</button>
         </div>
-        <button class="apply-btn" style="background:#ba1111;" onclick="logout()">LOGOUT</button>
-    </div>
-</div>
+        <div style="font-weight:bold; color:var(--primary);">S.AH ARENA</div>
+        <div style="color:#ffcc00; font-weight:bold;">🪙 <span id="topCoins">0</span></div>
+    </header>
 
-<div id="depositPage" class="page">
-    <div class="rules-card">
-        <h2 style="color:#ffae00;">DEPOSIT COINS</h2>
-        <select id="coinAmt">
-            <option value="100">Rs. 100 (50 Coins)</option>
-            <option value="500">Rs. 500 (250 Coins)</option>
-            <option value="1000">Rs. 1000 (500 Coins)</option>
-        </select>
-        <div style="background:#000; border:1px dashed #ff4500; padding:10px; margin:10px 0; text-align:center;">
-            <b>ADMIN: 03047391349</b><br><small>JazzCash / EasyPaisa</small>
+    <div id="sideMenu" class="side-menu">
+        <button onclick="showPage('home'); toggleMenu()">🏠 ARENA</button>
+        <button onclick="showPage('dashboard'); toggleMenu()">📊 DASHBOARD</button>
+        <button onclick="showPage('missionsPage'); toggleMenu()">🎯 MISSIONS</button>
+        <button onclick="showPage('inboxPage'); toggleMenu()">📩 INBOX</button>
+        <button onclick="showPage('depositPage'); toggleMenu()">💰 DEPOSIT</button>
+        <button onclick="showPage('withdrawPage'); toggleMenu()">💸 WITHDRAW</button>
+        <button onclick="showPage('profilePage'); toggleMenu()">👤 PROFILE</button>
+        <button onclick="logoutNow()" style="color:var(--primary);">🚪 LOGOUT</button>
+    </div>
+
+    <div id="authPage" class="page active">
+        <div class="stat-box" id="signupContainer" style="margin-top:50px; display: block;">
+            <h2 style="text-align:center; color:var(--primary);">CREATE ACCOUNT</h2>
+            <input type="text" id="rUid" placeholder="Game UID">
+            <input type="text" id="rName" placeholder="In-Game Name">
+            <input type="email" id="signupEmail" placeholder="Email Address">
+            <input type="password" id="signupPass" placeholder="Password">
+            <button class="apply-btn" onclick="handleSignup()">CREATE ACCOUNT</button>
+            <div class="google-circle" onclick="googleAuth()">
+                <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" width="22">
+            </div>
+            <p style="text-align:center; font-size:12px; cursor:pointer;" onclick="showLoginBox()">Already have account? <span style="color:var(--primary);">Login</span></p>
         </div>
-        <div style="display:flex; gap:10px;">
-            <button class="apply-btn" style="background:#ba1111;" onclick="pay('jazz')">JAZZCASH</button>
-            <button class="apply-btn" style="background:#1f8b37;" onclick="pay('easy')">EASYPAISA</button>
+
+        <div class="stat-box" id="loginContainer" style="margin-top:50px; display: none;">
+            <h2 style="text-align:center; color:var(--primary);">LOGIN</h2>
+            <input type="email" id="loginEmail" placeholder="Email Address">
+            <input type="password" id="loginPass" placeholder="Password">
+            <button class="apply-btn" onclick="handleLogin()">LOGIN</button>
+            <div class="google-circle" onclick="googleAuth()">
+                <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" width="22">
+            </div>
+            <p style="text-align:center; font-size:12px; cursor:pointer;" onclick="showSignupBox()">Need an account? <span style="color:var(--primary);">Signup</span></p>
         </div>
-        <button class="apply-btn" style="background:#333; margin-top:15px;" onclick="showPage('screenshotPage')">UPLOAD SCREENSHOT</button>
     </div>
-</div>
 
-<div id="withdrawPage" class="page">
-    <div class="rules-card">
-        <h2>WITHDRAW</h2>
-        <input type="text" placeholder="Account Name">
-        <select><option>EasyPaisa</option><option>JazzCash</option></select>
-        <input type="number" placeholder="Account Number">
-        <input type="number" placeholder="Coins">
-        <button class="apply-btn" onclick="alert('Submitted!')">SUBMIT REQUEST</button>
+    <div id="dashboard" class="page">
+        <div class="stat-box" style="text-align:center;">
+            <div id="welcomeSection" style="margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">
+                <h3 style="color: var(--primary); margin: 0;">Welcome to S.AH Arena! 🔥</h3>
+                <p style="font-size: 13px; color: #aaa; margin-top: 5px;">Tayyar ho jao warrior! Yahan aap tournaments khel kar coins jeet sakte hain. Good luck!</p>
+            </div>
+            <p style="margin:0; font-size:12px; color:gray;">AVAILABLE BALANCE</p>
+            <h1 style="color:#ffcc00; font-size:45px; margin:5px 0;">🪙 <span id="sBal">0</span></h1>
+            <div class="hub-grid">
+                <div class="hub-card" onclick="showPage('home')">🏠 ARENA</div>
+                <div class="hub-card" onclick="showPage('missionsPage')">🎯 MISSIONS</div>
+                <div class="hub-card" onclick="showPage('inboxPage')">📩 INBOX</div>
+                <div class="hub-card" onclick="showPage('depositPage')">💰 DEPOSIT</div>
+                <div class="hub-card" onclick="showPage('withdrawPage')">💸 WITHDRAW</div>
+                <div class="hub-card" onclick="showPage('profilePage')">👤 PROFILE</div>
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="screenshotPage" class="page">
-    <div class="rules-card">
-        <h2>UPLOAD PROOF</h2>
-        <p style="color:red; font-size:10px;">⚠️ Bina SS ke coins add nahi honge.</p>
-        <input type="number" placeholder="Amount Sent">
-        <input type="file">
-        <button class="apply-btn">SEND TO ADMIN</button>
+    <div id="missionsPage" class="page">
+        <div class="stat-box">
+            <h2 style="color:var(--primary);">🎯 MISSIONS</h2>
+            <div class="detail-row"><span>Daily Match</span> <span style="color:var(--secondary);">+10 🪙</span></div>
+        </div>
     </div>
-</div>
 
-<script>
-    
-const firebaseConfig = { apiKey: "AIzaSyArrJJlxbvMVUjnw19yvmp0Z0Y1uKUHDNo", databaseURL: "https://sahbattlegrounds-default-rtdb.firebaseio.com/" };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const adminNum = "03047391349";
+    <div id="inboxPage" class="page">
+        <div class="stat-box">
+            <h2 style="color:var(--primary);">📩 INBOX</h2>
+            <p style="text-align:center; color:gray;">Welcome to S.AH Arena!</p>
+        </div>
+    </div>
 
-function startApp() { document.getElementById("welcomeScreen").style.display = "none"; showPage('register'); }
-function toggleMenu() { document.getElementById("sideMenu").classList.toggle("open"); }
-function showPage(p){ 
-    document.querySelectorAll(".page").forEach(pg => pg.classList.remove("active")); 
-    document.getElementById(p).classList.add("active");
-    document.getElementById("sideMenu").classList.remove("open");
-    let user = localStorage.getItem("user");
-    if(user && (p !== 'login' && p !== 'register')) {
-        document.getElementById("mainHeader").style.display = "flex";
-        document.getElementById("sideMenu").style.display = "block";
-    } else {
-        document.getElementById("mainHeader").style.display = "none";
-        document.getElementById("sideMenu").style.display = "none";
-    }
-}
-function goBack() { showPage('home'); }
-function previewImg(input) { if (input.files && input.files[0]) { let r = new FileReader(); r.onload = e => document.getElementById('userPic').src = e.target.result; r.readAsDataURL(input.files[0]); } }
+    <div id="withdrawPage" class="page">
+        <div class="stat-box" style="border: 1px solid var(--primary); background: linear-gradient(145deg, #111, #050505);">
+            <h2 style="color:var(--primary); text-align: center; letter-spacing: 2px;">💸 WITHDRAWAL</h2>
+            <p style="text-align: center; font-size: 12px; color: #888; margin-bottom: 20px;">Minimum Withdraw: 🪙 100</p>
+            <input type="text" id="wName" placeholder="Full Name">
+            <input type="number" id="wNumber" placeholder="03xx xxxxxxx">
+            <input type="number" id="wAmount" placeholder="Enter Amount">
+            <button class="apply-btn" onclick="submitWithdraw()">SUBMIT REQUEST 🚀</button>
+        </div>
+    </div>
 
-function registerUser(){
-    let p = document.getElementById('regP').value, u = document.getElementById('regU').value, e = document.getElementById('regE').value, s = document.getElementById('regS').value;
-    if(!p || !u || !e || !s) return alert("Fill all!");
-    db.ref('allPlayers/'+u).set({p,u,e,s,points:0,wins:0,joined:0}).then(()=> { 
-        localStorage.setItem("user", JSON.stringify({p,u,e,s})); updateUI({p,u,e,s});
-    });
-}
-function loginUser(){
-    let e = document.getElementById('logE').value, s = document.getElementById('logS').value;
-    db.ref('allPlayers').once('value', snap => {
-        snap.forEach(child => { if(child.val().e === e && child.val().s === s){ localStorage.setItem("user", JSON.stringify(child.val())); updateUI(child.val()); } });
-    });
-}
-function pay(type) {
-    let amt = document.getElementById('coinAmt').value;
-    window.location.href = `tel:*786*1*1*${adminNum}*${amt}%23`;
-    setTimeout(() => { window.location.href = type === 'jazz' ? "jazzcash://" : "easypaisa://"; }, 2000);
-}
-function updateUI(user){
-    if(user){
-        document.getElementById("welcomeScreen").style.display = "none";
-        document.getElementById("pName").innerText = user.p;
-        document.getElementById("pUid").innerText = user.u;
-        document.getElementById("pEmail").innerText = user.e;
-        db.ref('allPlayers/'+user.u).on('value', s => {
-            let d = s.val() || {};
-            document.getElementById("topCoins").innerText = d.points || 0;
-            document.getElementById("statJoined").innerText = d.joined || 0;
-            document.getElementById("statWins").innerText = d.wins || 0;
+    <div id="depositPage" class="page">
+        <div class="stat-box">
+            <h2 style="color:var(--primary);">DEPOSIT COINS</h2>
+            <div class="bot-container" id="botBox">
+                <div class="scan-line" id="sLine"></div>
+                <input type="number" id="dAmount" placeholder="Enter Amount">
+                <input type="text" id="dDate" placeholder="Date (e.g., 04-April)">
+                <input type="text" id="dTime" placeholder="Time (e.g., 11:30 AM)">
+                <label style="display:block; background:#1a1a1a; padding:15px; border-radius:12px; border:1px dashed var(--primary); margin:10px 0; cursor:pointer;">
+                    📤 UPLOAD SCREENSHOT
+                    <input type="file" id="dFile" style="display:none;" accept="image/*">
+                </label>
+                <button class="apply-btn" onclick="startBotScan()">VERIFY WITH AI BOT 🤖</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="home" class="page">
+        <h2 style="color:var(--primary);">LIVE MATCHES</h2>
+        <div id="roomInfo" class="room-info-box">
+            <h3 style="margin:0; color:#00ff00;">✅ MATCH JOINED</h3>
+            <p id="roomDetailsText" style="font-family: monospace; color:#fff; font-size:16px; margin:10px 0;"></p>
+            <small style="color:gray;">Note down ID/Pass and join in-game.</small>
+        </div>
+        <div id="matchList">Loading...</div>
+    </div>
+
+    <div id="profilePage" class="page">
+        <div class="stat-box">
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="https://via.placeholder.com/80" id="pImgMain" style="width:80px; height:80px; border-radius:15px; border:2px solid var(--primary); object-fit: cover;">
+                <h2 id="pName" style="margin:10px 0 0 0; color:var(--primary);">...</h2>
+            </div>
+            <div class="detail-row"><span>Game UID:</span> <span id="pUidVal" style="color:gray;">...</span></div>
+            <div class="detail-row"><span>Email:</span> <span id="pEmail" style="color:gray;">...</span></div>
+            <div class="detail-row"><span>Balance:</span> <span id="pWallet" style="color:#ffcc00;">🪙 0</span></div>
+            <button class="apply-btn" style="background:#222; margin-top:20px;" onclick="logoutNow()">LOGOUT</button>
+        </div>
+           </div>
+                   <script>
+        // FIREBASE CONFIGURATION (Updated for proper Google Auth)
+        const firebaseConfig = { 
+            apiKey: "AIzaSyArrJJlxbvMVUjnw19yvmp0Z0Y1uKUHDNo", 
+            authDomain: "sahbattlegrounds.firebaseapp.com",
+            projectId: "sahbattlegrounds",
+            databaseURL: "https://sahbattlegrounds-default-rtdb.firebaseio.com" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database(), auth = firebase.auth();
+
+        let currentCoins = 0;
+        
+        // 🔔 CUSTOM ALERT SYSTEM
+        function myAlert(title, message) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = message;
+            document.getElementById('customAlert').style.display = 'flex';
+        }
+        function closeAlert() { document.getElementById('customAlert').style.display = 'none'; }
+        
+        // 🔄 SWITCH BETWEEN LOGIN & SIGNUP
+        function showLoginBox() {
+            document.getElementById('signupContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+        }
+        function showSignupBox() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('signupContainer').style.display = 'block';
+        }
+
+        // 📝 USER REGISTRATION (SIGNUP)
+        async function handleSignup() {
+            const e = document.getElementById('signupEmail').value;
+            const p = document.getElementById('signupPass').value;
+            const u = document.getElementById('rUid').value;
+            const n = document.getElementById('rName').value;
+            if(!e || !p || !u || !n) return myAlert("⚠️ Alert", "Tamam fields fill kijiye!");
+            try {
+                const res = await auth.createUserWithEmailAndPassword(e, p);
+                await db.ref('allPlayers/'+res.user.uid).set({ p: n, gameUid: u, points: 0 });
+                myAlert("✅ Success", "Account ban gaya hai!");
+            } catch(ex) { myAlert("❌ Error", ex.message); }
+        }
+
+        // 🔑 USER LOGIN
+        async function handleLogin() {
+            const e = document.getElementById('loginEmail').value;
+            const p = document.getElementById('loginPass').value;
+            if(!e || !p) return myAlert("⚠️ Alert", "Email aur password enter karen!");
+            try { await auth.signInWithEmailAndPassword(e, p); } catch(ex) { myAlert("❌ Error", ex.message); }
+        }
+
+        // 🌐 GOOGLE LOGIN
+        function googleAuth() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            auth.signInWithPopup(provider).then(res => {
+                const user = res.user;
+                db.ref('allPlayers/'+user.uid).once('value', s => {
+                    if(!s.exists()) db.ref('allPlayers/'+user.uid).set({ p: user.displayName, gameUid: 'N/A', points: 0 });
+                });
+            }).catch(e => { 
+                if(e.code !== 'auth/popup-closed-by-user') myAlert("❌ Error", e.message); 
+            });
+        }
+
+        // 👤 AUTH STATE
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                document.getElementById('mainHeader').style.display = 'flex';
+                db.ref('allPlayers/'+user.uid).on('value', s => {
+                    const d = s.val() || {};
+                    currentCoins = d.points ? parseInt(d.points) : 0;
+                    document.getElementById('sBal').innerText = currentCoins;
+                    document.getElementById('topCoins').innerText = currentCoins;
+                    document.getElementById('pName').innerText = d.p || "Player";
+                    document.getElementById('pUidVal').innerText = d.gameUid || "N/A";
+                    document.getElementById('pEmail').innerText = user.email;
+                    document.getElementById('pWallet').innerText = "🪙 " + currentCoins;
+                });
+                showPage('dashboard');
+            } else {
+                document.getElementById('mainHeader').style.display = 'none';
+                showPage('authPage');
+            }
         });
-        showPage('home');
-    }
-}
-function logout(){ localStorage.clear(); window.location.reload(); }
-window.onload = () => { let user = JSON.parse(localStorage.getItem("user")); if(user) updateUI(user); };
-// --- 1. Tesseract Library Load Karein (Head mein add karein) ---
-// <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
-   
-</script>
-</body>
-                </html>
+        // 🏆 LOAD LIVE MATCHES
+        function loadMatches() {
+            const list = document.getElementById('matchList');
+            db.ref('liveMatches').on('value', snap => {
+                list.innerHTML = "";
+                snap.forEach(child => {
+                    const m = child.val();
+                    let matchImageLink = m.img || m.Img || m.image || 'https://via.placeholder.com/400x200';
+                    list.innerHTML += `
+                        <div class="stat-box" style="padding:10px;">
+                            <img src="${matchImageLink}" class="match-img" onerror="this.src='https://via.placeholder.com/400x200'">
+                            <b>${m.name || m.title}</b>
+                            <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:10px;">
+                                <span>Prize: 🪙${m.prize || 0}</span>
+                            </div>
+                            <button class="apply-btn" onclick="joinMatchBot('${m.roomID}', '${m.roomPass}')">JOIN NOW</button>
+                        </div>`;
+                });
+            });
+        }
+
+        // ⚔️ JOIN MATCH LOGIC
+        function joinMatchBot(rid, rpass) {
+            myAlert("🤖 BOT", "Checking match details...");
+            setTimeout(() => {
+                closeAlert();
+                document.getElementById('roomInfo').style.display = 'block';
+                document.getElementById('roomDetailsText').innerHTML = "ROOM ID: " + rid + "<br>PASS: " + rpass;
+                myAlert("✅ Success!", "Match joined! Room ID & Password check karen.");
+                window.scrollTo(0,0);
+            }, 1200);
+        }
+
+        // 🤖 BOT SCANNING (DEPOSIT COINS)
+        function startBotScan() {
+            const amt = document.getElementById('dAmount').value.trim();
+            const uDate = document.getElementById('dDate').value.trim();
+            const uTime = document.getElementById('dTime').value.trim();
+            const fileInput = document.getElementById('dFile');
+
+            if(!amt || !uDate || !uTime || fileInput.files.length === 0) {
+                return myAlert("🤖 BOT", "Pehle tamam details bharen aur screenshot upload karen!");
+            }
+
+            document.getElementById('sLine').style.display = 'block';
+            myAlert("🤖 BOT", "Screenshot aur details verify ho rahi hain...");
+
+            let userString = `${amt} | ${uDate} | ${uTime}`;
+
+            setTimeout(() => { 
+                document.getElementById('sLine').style.display = 'none'; 
                 
+                db.ref('botHistory').once('value', snapshot => {
+                    let recordFound = false;
+                    let matchedKey = null;
+
+                    snapshot.forEach(child => {
+                        let historyData = child.val();
+                        if(historyData.log && historyData.log.trim() === userString) {
+                            recordFound = true;
+                            matchedKey = child.key;
+                        }
+                    });
+
+                    closeAlert();
+
+                    if(!recordFound) {
+                        myAlert("❌ Bot Alert!", "Ye details fake hain ya admin ne abhi tak approve nahi kin!");
+                    } else {
+                        let userRef = db.ref('allPlayers/' + auth.currentUser.uid);
+                        let coinsToAdd = parseInt(amt); 
+                        let finalCoins = parseInt(currentCoins) + coinsToAdd;
+
+                        userRef.update({ points: finalCoins });
+                        
+                        if(matchedKey) {
+                            db.ref('botHistory/' + matchedKey).remove();
+                        }
+
+                        myAlert("✅ Bot Success!", "Screenshot verify ho gaya hai! " + coinsToAdd + " Coins add ho chuke hain.");
+                    }
+                });
+            }, 3000);
+        }
+
+        // 💸 WITHDRAWAL REQUEST
+        function submitWithdraw() {
+            const name = document.getElementById('wName').value;
+            const num = document.getElementById('wNumber').value;
+            const amt = document.getElementById('wAmount').value;
+            if(!name || !num || !amt) return myAlert("⚠️ Alert", "Fill all details!");
+            if(amt < 100) return myAlert("⚠️ Alert", "Minimum 100 coins required!");
+            if(currentCoins < amt) return myAlert("❌ Error", "Insufficient coins!");
+            myAlert("✅ Request Sent!", "Amount: 🪙" + amt);
+            showPage('dashboard');
+        }
+
+        // 📄 PAGE SWITCHER
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('backBtn').style.display = (id === 'dashboard') ? 'none' : 'block';
+            if(id === 'home') loadMatches();
+        }
+
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
+        function logoutNow() { auth.signOut().then(() => location.reload()); }
+    </script>
+</body>
+   </html>
+
