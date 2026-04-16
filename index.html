@@ -416,31 +416,22 @@
 
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
         function logoutNow() { auth.signOut().then(() => location.reload()); }
-                       
-    document.getElementById('portalBtn').addEventListener('click', function() {
-    const welcomeSection = document.getElementById('welcomeScreen');
-    if (welcomeSection) {
-        welcomeSection.style.display = 'none'; // Description hide karega
-    }
-    showPage('login'); // Login screen dikhayega
-});
-// Button click logic: Description ko hide kar ke login page dikhane ke liye
-document.getElementById('portalBtn').addEventListener('click', function() {
-    
-    // 1. Welcome section ko dhoondna aur hide karna
-    const welcomeSection = document.getElementById('welcomeScreen');
-    if (welcomeSection) {
-        welcomeSection.style.display = 'none';
-    }
+        document.getElementById('portalBtn').addEventListener('click', function() {
+    // 1. Welcome Screen (Description) ko hide karein
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) { welcome.style.display = 'none'; }
 
-    // 2. Login page dikhana
+    // 2. Header ko show karein
+    const header = document.getElementById('mainHeader');
+    if (header) { header.style.display = 'block'; }
+
+    // 3. Login/Sign-up page ko show karein
     showPage('login'); 
     
-    console.log("Transition to Login successful.");
+    console.log("Header shown and moving to Login page.");
 });
-                       
-
-
+            
+    
         
     </script>
 </body>
