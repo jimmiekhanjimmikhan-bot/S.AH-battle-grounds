@@ -411,38 +411,23 @@
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
         function logoutNow() { auth.signOut().then(() => location.reload()); }
                        
-    // Button click logic: Description ko hide kar ke login page dikhane ke liye
+    
+// Button click logic: Description ko hide kar ke login page dikhane ke liye
 document.getElementById('portalBtn').addEventListener('click', function() {
     
-    // 1. Welcome description wali div ko hide karega
+    // 1. Welcome section ko dhoondna aur hide karna
     const welcomeSection = document.getElementById('welcomeScreen');
     if (welcomeSection) {
         welcomeSection.style.display = 'none';
     }
 
-    // 2. Phir aapka login/signup page show karega
-    // Aapke code mein 'login' page hi pehla step hai
+    // 2. Login page dikhana
     showPage('login'); 
     
     console.log("Transition to Login successful.");
 });
+                       
 
-// Purana showPage function check karein ke wo theek kaam kar raha hai
-function showPage(pageId) {
-    const pages = ['login', 'home', 'settings', 'admin', 'profile'];
-    pages.forEach(id => {
-        const page = document.getElementById(id);
-        if (page) {
-            page.classList.remove('active');
-        }
-    });
-    
-    const activePage = document.getElementById(pageId);
-    if (activePage) {
-        activePage.classList.add('active');
-    }
-                }
-                                         
 
         
     </script>
