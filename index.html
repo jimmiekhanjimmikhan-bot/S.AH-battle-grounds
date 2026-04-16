@@ -57,7 +57,7 @@
     </style>
 </head>
 <body>
-<div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333; max-width: 800px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+   <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333; max-width: 800px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
     
     <h1 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">S.AH Battle Grounds: The Ultimate Gaming & Tactical Resource</h1>
 
@@ -77,7 +77,7 @@
         <a href="#" style="background-color: #d32f2f; color: white; padding: 15px 35px; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 1.1em; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">Continue to Portal</a>
     </div>
 
-    </div>
+   </div>
     
     <div class="custom-alert-bg" id="customAlert">
         <div class="custom-alert-box">
@@ -412,6 +412,15 @@
 
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
         function logoutNow() { auth.signOut().then(() => location.reload()); }
+                       
+    document.querySelector('a[style*="background-color: #d32f2f"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Welcome to S.AH Battle Grounds! Redirecting to the gaming portal...');
+        // Agar aap kisi page par bhejna chahte hain toh niche wali line use karein:
+        // window.location.href = "your-next-page.html";
+    });
+
+        
     </script>
 </body>
    </html>
