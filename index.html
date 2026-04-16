@@ -57,27 +57,25 @@
     </style>
 </head>
 <body>
-   <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333; max-width: 800px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div style="background-color: #000; color: #ccc; padding: 40px 20px; font-family: Arial, sans-serif; line-height: 1.8;">
+    <h1 style="color: #ff4d4d; border-bottom: 2px solid #ff4d4d; padding-bottom: 10px;">S.AH Battle Grounds: Professional Esports Portal</h1>
     
-    <h1 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">S.AH Battle Grounds: The Ultimate Gaming & Tactical Resource</h1>
+    <p>Welcome to S.AH Battle Grounds, your number one source for all things related to tactical gaming and battle royale strategies. We are dedicated to giving you the very best of gaming insights, with a focus on original content, technical bot development, and real-time esports updates. Our platform serves as a bridge between professional competition and casual enthusiasts, providing high-quality guides that help players master their skills and dominate the arena. Every article you find here is meticulously researched to ensure it meets the highest standards of accuracy and utility for the global gaming community.</p>
 
-    <h2 style="color: #1976d2; margin-top: 25px;">Advanced Gameplay Mastery and Strategy</h2>
-    <p style="text-align: justify; margin-bottom: 15px;">Welcome to S.AH Battle Grounds, your dedicated portal for high-octane gaming content and strategic analysis. In the competitive world of modern battle royale and tactical shooters, simply having fast reflexes isn't enough. We provide in-depth breakdowns of game mechanics, weapon stats, and map positioning to give you the winning edge. Our guides are designed for both beginners and pro players, ensuring that everyone can find value in our comprehensive tactical modules. From recoil control to squad communication, we cover everything you need to dominate the battlefield.</p>
+    <h2 style="color: #ff4d4d; margin-top: 30px;">Strategic Analysis and Tactical Mastery</h2>
+    <p>In the fast-paced world of modern battle royale games, success is determined by more than just speed; it is determined by strategy. At S.AH Battle Grounds, we dive deep into map rotations, weapon meta-shifts, and positioning tactics. Our experts provide detailed breakdowns of loot paths and tactical vantage points that give you the edge over your opponents. Whether you are looking for the best sensitivity settings or advanced squad synchronization techniques, our comprehensive modules are designed to level up your gameplay efficiently. We believe that an informed player is a winner.</p>
 
-    <h2 style="color: #1976d2; margin-top: 25px;">The Intersection of AI and Gaming Technology</h2>
-    <p style="text-align: justify; margin-bottom: 15px;">One of the unique features of S.AH Battle Grounds is our focus on the technical side of gaming. We explore how bot development and artificial intelligence are revolutionizing the way players practice and improve. Our articles delve into automated tactical simulations that help players understand enemy movement patterns. By integrating coding insights with gaming performance, we offer a unique perspective that you won't find on any other gaming blog. We are committed to original research, ensuring that all our tech-related content is accurate and highly beneficial for the gaming community.</p>
+    <h2 style="color: #ff4d4d; margin-top: 30px;">The Future of AI and Gaming Practice</h2>
+    <p>We are also at the forefront of technical innovation in gaming. Our specialized section on bot development and artificial intelligence explores how automation is shaping the future of practice sessions. We discuss how tactical simulations can help players develop muscle memory faster and understand enemy patterns with precision. By combining coding insights with gaming performance, S.AH Battle Grounds offers a unique perspective that is valuable to both players and developers. Our commitment to original research ensures that our technical content is always ahead of the curve.</p>
 
-    <h2 style="color: #1976d2; margin-top: 25px;">Global Esports Community and Real-Time Updates</h2>
-    <p style="text-align: justify; margin-bottom: 15px;">Stay ahead of the curve with our real-time news feed. S.AH Battle Grounds monitors global esports tournaments, roster changes, and major patch notes directly from game developers. Whether it is a new map release or a seasonal balance change, our team ensures you get the information first. We believe that a well-informed player is a better player. Our platform also serves as a hub for enthusiasts to discuss the latest trends, share their best clips, and connect with like-minded gamers from across the globe. Join us as we push the boundaries of what a gaming community can achieve.</p>
-
-    <h2 style="color: #1976d2; margin-top: 25px;">Commitment to Quality and User Experience</h2>
-    <p style="text-align: justify; margin-bottom: 15px;">As we continue to expand S.AH Battle Grounds, our primary goal remains the same: providing top-tier, original, and valuable content to our users. We adhere to the highest standards of digital publishing to ensure our site is both user-friendly and highly informative. Our articles are meticulously researched and formatted to provide the best reading experience on any device. We thank our community for their ongoing support and invite you to explore every corner of our platform to fully level up your gaming journey.</p>
+    <h2 style="color: #ff4d4d; margin-top: 30px;">Join the Elite Gaming Community</h2>
+    <p>Beyond providing guides, we are building a vibrant community of passionate gamers. We keep you updated with real-time news regarding global tournaments, patch notes, and seasonal updates directly from the developers. S.AH Battle Grounds adheres to strict digital publishing policies to ensure a safe and informative environment. We thank you for choosing our platform as your tactical guide and look forward to seeing you at the top of the leaderboards. Explore our features, join the discussion, and prepare for the next level of tactical engagement.</p>
 
     <div style="text-align: center; margin-top: 40px;">
-        <a href="#" style="background-color: #d32f2f; color: white; padding: 15px 35px; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 1.1em; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">Continue to Portal</a>
+        <button id="portalBtn" style="background-color: #ff4d4d; color: white; padding: 15px 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1.1em;">Continue to Portal</button>
     </div>
-
-   </div>
+</div>
+    
     
     <div class="custom-alert-bg" id="customAlert">
         <div class="custom-alert-box">
@@ -413,12 +411,38 @@
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
         function logoutNow() { auth.signOut().then(() => location.reload()); }
                        
-    document.querySelector('a[style*="background-color: #d32f2f"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Welcome to S.AH Battle Grounds! Redirecting to the gaming portal...');
-        // Agar aap kisi page par bhejna chahte hain toh niche wali line use karein:
-        // window.location.href = "your-next-page.html";
+    // Button click logic: Description ko hide kar ke login page dikhane ke liye
+document.getElementById('portalBtn').addEventListener('click', function() {
+    
+    // 1. Welcome description wali div ko hide karega
+    const welcomeSection = document.getElementById('welcomeScreen');
+    if (welcomeSection) {
+        welcomeSection.style.display = 'none';
+    }
+
+    // 2. Phir aapka login/signup page show karega
+    // Aapke code mein 'login' page hi pehla step hai
+    showPage('login'); 
+    
+    console.log("Transition to Login successful.");
+});
+
+// Purana showPage function check karein ke wo theek kaam kar raha hai
+function showPage(pageId) {
+    const pages = ['login', 'home', 'settings', 'admin', 'profile'];
+    pages.forEach(id => {
+        const page = document.getElementById(id);
+        if (page) {
+            page.classList.remove('active');
+        }
     });
+    
+    const activePage = document.getElementById(pageId);
+    if (activePage) {
+        activePage.classList.add('active');
+    }
+                }
+                                         
 
         
     </script>
