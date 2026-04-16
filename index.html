@@ -18,7 +18,13 @@
 
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
         body::before { content: ""; position: fixed; inset: 0; border: 4px solid transparent; border-radius: 25px; background: conic-gradient(from var(--angle), transparent, var(--primary), var(--secondary), var(--primary), transparent) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; pointer-events: none; z-index: 9999; animation: rotate-angle 3s linear infinite; }
-
+.page {
+    display: none; /* Saare pages ko pehle hide rakho */
+}
+.page.active {
+    display: block; /* Sirf active page ko dikhao */
+}
+        
         header { background: #000; border-bottom: 1px solid #222; padding: 12px; position: sticky; top: 0; z-index: 1000; display: none; align-items: center; justify-content: space-between; }
         .header-profile-img { width: 35px; height: 35px; border-radius: 8px; border: 1.5px solid var(--primary); object-fit: cover; cursor: pointer; }
 
@@ -411,7 +417,13 @@
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
         function logoutNow() { auth.signOut().then(() => location.reload()); }
                        
-    
+    document.getElementById('portalBtn').addEventListener('click', function() {
+    const welcomeSection = document.getElementById('welcomeScreen');
+    if (welcomeSection) {
+        welcomeSection.style.display = 'none'; // Description hide karega
+    }
+    showPage('login'); // Login screen dikhayega
+});
 // Button click logic: Description ko hide kar ke login page dikhane ke liye
 document.getElementById('portalBtn').addEventListener('click', function() {
     
