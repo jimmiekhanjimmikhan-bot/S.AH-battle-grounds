@@ -222,6 +222,18 @@
         </div>
            </div>
                    <script>
+                           // 2. Header ko show karein
+    const header = document.getElementById('mainHeader');
+    if (header) { header.style.display = 'block'; }
+
+    // 3. Login/Sign-up page ko show karein
+    showPage('login'); 
+    
+    console.log("Header shown and moving to Login page.");
+});
+            
+    
+        
         // FIREBASE CONFIGURATION (Updated for proper Google Auth)
         const firebaseConfig = { 
             apiKey: "AIzaSyArrJJlxbvMVUjnw19yvmp0Z0Y1uKUHDNo", 
@@ -420,19 +432,6 @@
     // 1. Welcome Screen (Description) ko hide karein
     const welcome = document.getElementById('welcomeScreen');
     if (welcome) { welcome.style.display = 'none'; }
-
-    // 2. Header ko show karein
-    const header = document.getElementById('mainHeader');
-    if (header) { header.style.display = 'block'; }
-
-    // 3. Login/Sign-up page ko show karein
-    showPage('login'); 
-    
-    console.log("Header shown and moving to Login page.");
-});
-            
-    
-        
     </script>
 </body>
    </html>
